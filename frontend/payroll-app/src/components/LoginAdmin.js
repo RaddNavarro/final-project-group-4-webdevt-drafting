@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, redirect, useNavigate } from "react-router-dom";
 
 
 export const LoginAdmin = () => {
@@ -15,9 +15,6 @@ export const LoginAdmin = () => {
 
     const [errorMsg, setErrorMsg] = useState('');
 
-    const emailAdmin = useRef('');
-    const passwordAdmin = useRef('');
-
     const navigate = useNavigate();
 
     const isCorrect = (email, password) => {
@@ -25,7 +22,8 @@ export const LoginAdmin = () => {
         return adminUser.some(adminUser => adminUser.email === email && adminUser.password === password)
     }
 
-    const handleLogin = () => {
+    const checkCredentials = () => {
+        console.log(email, password)
         if (isCorrect(email, password)) {
             navigate('/home');
             
@@ -36,6 +34,50 @@ export const LoginAdmin = () => {
         }
     }
 
+
+    const Validation = () => {
+        const regEx = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        
+       
+
+        if (email && password) {
+
+            
+
+            
+                
+
+            if (!regEx.test(email) && email !== '') {
+                setErrorMsg('Invalid Email!');
+            }
+            // if (adminUser.some(adminUser => adminUser.email !== email && adminUser.password === password)) {
+            //     setErrorMsg('Incorrect Email!')
+            // } else if (adminUser.some(adminUser => adminUser.email === email && adminUser.password !== password)) {
+            //     setErrorMsg('Incorrect Password!');
+            // } else {
+            //     setErrorMsg('Incorrect Credentials');
+            // }
+
+            if (isCorrect(email, password)) {
+                navigate('/home');
+            } else {
+                setErrorMsg('Incorrect Credentials!');
+            }
+
+
+
+        } else {
+            setErrorMsg('Input fields');
+
+        }
+
+    }
+
+    
+
+    
+
+    
 
     return (
 
@@ -58,7 +100,7 @@ export const LoginAdmin = () => {
                     </div>
                 </form>
 
-                <button type="button" class="btn btn-primary" onClick={handleLogin}>Login</button>
+                <button type="button" class="btn btn-primary" onClick={Validation}>Login</button>
 
                 {errorMsg ? <p>{errorMsg}</p> : ''}
             </div>
