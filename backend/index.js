@@ -2,15 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const EmployeeModel = require('./models/Employee.js');
-
+const connectDB = require('./database.js');
 
 const app = express();
 
+
+
 app.use(express.json())
 app.use(cors())
+connectDB();    
 
 // connect to server
-mongoose.connect("mongodb://localhost:27017/employee");
+// mongoose.connect("mongodb://localhost:27017/employee");
 
 // routing to the register table
 app.post('/registers', (request, response) => {
