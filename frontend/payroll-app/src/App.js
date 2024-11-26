@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes } from 'react-router-dom';
-import { AddEmployee, Home, LoginEmployee, MyPayroll, MyProfile, PayrollLogs, ViewEmployee, LoginAdmin, LoginAs } from './components';
+import { AddEmployee, Home, LoginEmployee, MyPayroll, MyProfile, PayrollLogs, ViewEmployee, LoginAdmin, LoginAs, SignUp } from './components';
 import './App.css';
+
 
 
 
@@ -10,17 +11,13 @@ import './App.css';
 
 function App() {
 
-  const [employees, setEmployees] = useState([]);
-  const [employeeUser, setEmployeeUser] = useState([]);
-  
-
-
   return (
     <>
       <div className="App">
 
         <Routes>
-          <Route index element={<LoginAs />}></Route>
+          <Route index element={<SignUp />}></Route>
+          <Route path='/loginAs' element={<LoginAs />}></Route>
           <Route path='/loginAdmin' element={<LoginAdmin />}></Route>
           <Route path='/loginEmployee' element={<LoginEmployee />}></Route>
           
