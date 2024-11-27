@@ -10,10 +10,12 @@ export const LoginAs = () => {
             <h1>Login As Page</h1>
             <NavLink to='/loginAdmin'>
                 <button type="button" class="btn btn-primary">Login as Admin</button>
-            </NavLink>  
+            </NavLink>
             <NavLink to='/loginEmployee'>
                 <button type="button" class="btn btn-primary">Login as Employee</button>
-            </NavLink>  
+            </NavLink>
+            <br></br>
+            <NavLink to='/signUp' style={{ textDecoration: 'none', color: 'black' }}>Create Account</NavLink>
         </>
     );
 }
