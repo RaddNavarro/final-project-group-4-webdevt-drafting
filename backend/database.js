@@ -6,7 +6,7 @@ const connectDB = async () => {
             'mongodb+srv://radiannavarro:V9X9UZVTe3LZshlg@test.fspem.mongodb.net/?retryWrites=true&w=majority&appName=test'
         );
         console.log(`MongoDB Connected: ${connection.connection.host}`);
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         process.exit(1);
     }

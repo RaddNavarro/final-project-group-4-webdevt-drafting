@@ -6,9 +6,6 @@ import './App.css';
 
 
 
-
-
-
 function App() {
 
   return (
@@ -16,11 +13,12 @@ function App() {
       <div className="App">
 
         <Routes>
-          <Route index element={<SignUp />}></Route>
-          <Route path='/loginAs' element={<LoginAs />}></Route>
+          <Route index element={<LoginAs />}></Route>
+          <Route path='/signUp' element={<SignUp />}></Route>
           <Route path='/loginAdmin' element={<LoginAdmin />}></Route>
           <Route path='/loginEmployee' element={<LoginEmployee />}></Route>
-          
+          <Route path='/loginAs' element={<LoginAs />}></Route>
+
         </Routes>
 
         <Routes>
