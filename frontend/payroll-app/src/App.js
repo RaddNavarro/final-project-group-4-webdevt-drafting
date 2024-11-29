@@ -34,10 +34,10 @@ function App() {
           <Route path='/employeeviewsalaryreport' element={<EmployeeViewSalaryReport />} />
           <Route path='/employeeleaverequest' element={<EmployeeLeaveRequest />} />
           <Route path='/employeeviewprofile' element={<EmployeeViewProfile/>} />
-          <Route path='/myPayroll' element={<MyPayroll />} />
+          {/* <Route path='/myPayroll' element={<MyPayroll />} />
           <Route path='/MyProfile' element={<MyProfile />} />
           <Route path='/payrollLogs' element={<PayrollLogs />} />
-          <Route path='/viewEmployee' element={<ViewEmployee />} />
+          <Route path='/viewEmployee' element={<ViewEmployee />} /> */}
 
         </Routes>
 
