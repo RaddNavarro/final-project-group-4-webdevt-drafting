@@ -9,19 +9,20 @@ export const LoginAdmin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
-
+    const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        axios.post('http://localhost:3001/login-admin', { email, password })
+        axios.defaults.withCredentials = true;
+        axios.post('http://localhost:3001/api/auth-admin', { email, password })
             .then(result => {
-                console.log(result)
-                if (result.data === "Success") {
-                    navigate('/home');
+                if (result.data.errors) {
+                    setBackendErrorMsg(result.data.errors)
+                    console.log(backendErrorMsg)
                 } else {
-                    setErrorMsg(result.data);
+                    console.log(result.data)
+                    navigate('/homeAdmin');
                 }
             })
             .catch(error => console.log(error))
@@ -53,6 +54,11 @@ export const LoginAdmin = () => {
                 <button type="button" class="btn btn-primary" onClick={handleSubmit}>Log In</button>
                 <br></br>
                 <NavLink to='/signUp' style={{ textDecoration: 'none', color: 'black' }}>Create Account</NavLink>
+                <br></br>
+                <NavLink to='/loginAs' style={{ textDecoration: 'none', color: 'black' }}>Back</NavLink>
+                {backendErrorMsg && backendErrorMsg.map(e => (
+                    <p>{e.msg}</p>
+                ))}
                 {errorMsg && <p>{errorMsg}</p>}
 
 

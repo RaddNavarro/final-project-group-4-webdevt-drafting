@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const EmployeeSchema = new mongoose.Schema({
+const AdminSchema = new mongoose.Schema({
     email: String,
     password: String
 });
 
-const AdminModel = mongoose.model("registers-admin", EmployeeSchema);
+const AdminModel = mongoose.model("registers-admin", AdminSchema);
 
 module.exports = AdminModel;

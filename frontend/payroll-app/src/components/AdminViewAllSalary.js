@@ -1,25 +1,67 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink } from "react-router-dom";
-export const AdminViewAllSalary= () => {
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from 'axios';
+
+
+export const AdminViewAllSalary = () => {
+
+    const [auth, setAuth] = useState(false);
+    const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+    useEffect(() => {
+
+        axios.get('http://localhost:3001/admin')
+            .then(res => {
+                console.log(res.data)
+                if (res.data.msg === "Success") {
+                    setAuth(true)
+                    navigate('/adminviewallsalary')
+                } else {
+                    setAuth(false);
+                    console.log(res.data)
+
+                }
+
+            })
+            .catch(error => console.log(error))
+
+
+
+    }, [])
+
     return (
         <>
-        <h1>View Employee's Salary here</h1>
-        <NavLink to='/HomeAdmin'>
-                <button type="button" class="btn btn-primary">Home</button>
-            </NavLink>
-        <NavLink to='/AdminAddEmployee'>
-                <button type="button" class="btn btn-primary">Add Employee</button>
-            </NavLink>
-            <NavLink to='/AdminViewEmployee'>
-                <button type="button" class="btn btn-primary">View Employee</button>
-            </NavLink>
-            <NavLink to='/AdminGenerateSalaryReport'>
-                <button type="button" class="btn btn-primary">Generate Salary Report</button>
-            </NavLink>
-            <NavLink to='/AdminManageLeave'>
-                <button type="button" class="btn btn-primary">Manage Leave request</button>
-            </NavLink>
+            {
+                auth ?
+                    <>
+                        <h1>View Employee's Salary here</h1>
+                        <NavLink to='/homeAdmin'>
+                            <button type="button" class="btn btn-primary">Home</button>
+                        </NavLink>
+                        <NavLink to='/adminaddemployee'>
+                            <button type="button" class="btn btn-primary">Add Employee</button>
+                        </NavLink>
+                        <NavLink to='/adminviewemployee'>
+                            <button type="button" class="btn btn-primary">View Employee</button>
+                        </NavLink>
+                        <NavLink to='/admingeneratesalaryreport'>
+                            <button type="button" class="btn btn-primary">Generate Salary Report</button>
+                        </NavLink>
+                        <NavLink to='/adminmanageleave'>
+                            <button type="button" class="btn btn-primary">Manage Leave request</button>
+                        </NavLink>
+
+                    </>
+                    :
+                    <>
+                        <h2>Please Log in first</h2>
+                        <NavLink to='/loginAs'>
+                            <button type="button" class="btn btn-primary">Login</button>
+                        </NavLink>
+                    </>
+            }
+
         </>
     );
 }

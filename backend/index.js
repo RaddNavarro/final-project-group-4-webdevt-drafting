@@ -1,105 +1,68 @@
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const AdminModel = require('./models/Admins.js');
 const EmployeeModel = require('./models/Employees.js');
-const connectDB = require('./database.js');
+const connectDB = require('./config/database.js');
+const { authEmp } = require('./middleware/authEmp.js')
+const { authAdmin } = require('./middleware/authAdmin.js')
 
+
+// const connectDB1 = require('../frontend/payroll-app/src/components/LoginAs.js');
 const app = express();
-
-
-
-app.use(express.json())
-app.use(cors())
 connectDB();
 
-// connect to server
-// mongoose.connect("mongodb://localhost:27017/employee");
+// Init middleware???
+app.use(express.json({ extended: false }))
 
-// login route
-app.post('/login-admin', (request, result) => {
-    const { email, password } = request.body;
-    // checks the database if the email entered exists
-    AdminModel.findOne({ email: email })
-        .then(user => {
-            // if user existed
-            if (user) {
-                // if password is correct as in the database
-                if (user.password === password) {
-                    result.json("Success")
-                } else {
-                    result.json("Invalid credentials!")
-                }
-            } else {
-                result.json("Record doesn't exist")
-            }
-        })
-});
 
-app.post('/login-employee', (request, result) => {
-    const { email, password } = request.body;
-    // checks the database if the email entered exists
-    EmployeeModel.findOne({ email: email })
-        .then(user => {
-            // if user existed
-            if (user) {
-                // if password is correct as in the database
-                if (user.password === password) {
-                    result.json("Success")
-                } else {
-                    result.json("Invalid credentials!")
-                }
-            } else {
-                result.json("Record doesn't exist")
-            }
-        })
-});
+// app.get('/', (req, res) => res.send('API Running'));
 
-// register route for admin
-app.post('/registers-admin', (request, result) => {
-    const { email } = request.body;
-    AdminModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                if (user.email === request.body.email) {
 
-                    result.json("User already exists!");
-                }
-            } else {
-                AdminModel.create(request.body)
-                    .then(employees => result.json(employees))
-                    .catch(error => result.json(error));
-            }
-        })
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    method: ["POST", "GET"],
+    credentials: true
+}))
+
+// app.use(cors())
+
+app.use(cookieParser());
+
+
+app.get('/emp', authEmp, (req, res) => {
+    return res.json({ msg: 'Success'});
+})
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('jwtTokenEmployees');
+    return res.json({ msg: 'Success'});
+})
+
+app.get('/admin', authAdmin, (req, res) => {
+    return res.json({ msg: 'Success'});
+})
+
+app.get('/logoutAdmin', (req, res) => {
+    res.clearCookie('jwtTokenAdmins');
+    return res.json({ msg: 'Success'});
+})
 
 
 
 
-});
-
-// registers route for employee
-app.post('/registers-employees', (request, result) => {
-    const { email } = request.body;
-    EmployeeModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                if (user.email === request.body.email) {
-
-                    result.json("User already exists!");
-                }
-            } else {
-                EmployeeModel.create(request.body)
-                    .then(employees => result.json(employees))
-                    .catch(error => result.json(error));
-            }
-        })
-
-
-
-
-});
+// routes
+app.use('/api/employees', require('./routes/api/employees.js'));
+app.use('/api/admins', require('./routes/api/admin.js'));
+app.use('/api/profile', require('./routes/api/profiles.js'));
+app.use('/api/auth-employee', require('./routes/api/auth-employee.js'));
+app.use('/api/auth-admin', require('./routes/api/auth-admin.js'));
 
 // test connection
-app.listen(3001, () => {
-    console.log("server is running lmao");
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT} lmao`);
 });

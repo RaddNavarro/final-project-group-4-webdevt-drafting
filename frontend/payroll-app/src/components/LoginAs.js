@@ -15,7 +15,8 @@ export const LoginAs = () => {
                 <button type="button" class="btn btn-primary">Login as Employee</button>
             </NavLink>
             <br></br>
-            <NavLink to='/signUp' style={{ textDecoration: 'none', color: 'black' }}>Create Account</NavLink>
+            
         </>
     );
 }
+
