@@ -44,6 +44,7 @@ export const EmployeeLeaveRequest = () => {
                         <NavLink to='/employeeviewprofile'>
                             <button type="button" class="btn btn-primary">View Profile</button>
                         </NavLink>
+                        
                     </>
                     :
                     <>

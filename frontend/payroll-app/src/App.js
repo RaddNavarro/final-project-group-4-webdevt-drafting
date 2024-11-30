@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes } from 'react-router-dom';
-import { HomeEmployee, HomeAdmin, AdminViewEmployee, AdminAddEmployee, AdminGenerateSalaryReport, AdminViewAllSalary, AdminManageLeave, EmployeeViewSalaryReport, EmployeeViewProfile, EmployeeLeaveRequest, LoginEmployee, MyPayroll, MyProfile, PayrollLogs, ViewEmployee, LoginAdmin, LoginAs, SignUp} from './components';
+import { HomeEmployee, HomeAdmin, AdminViewEmployee, AdminAddEmployee, AdminGenerateSalaryReport, AdminViewAllSalary, AdminManageLeave, EmployeeViewSalaryReport, EmployeeViewProfile, EmployeeLeaveRequest, LoginEmployee, EmployeeEditProfile, MyPayroll, MyProfile, PayrollLogs, ViewEmployee, LoginAdmin, LoginAs, SignUp} from './components';
 import './App.css';
 
 
@@ -34,6 +34,7 @@ function App() {
           <Route path='/employeeviewsalaryreport' element={<EmployeeViewSalaryReport />} />
           <Route path='/employeeleaverequest' element={<EmployeeLeaveRequest />} />
           <Route path='/employeeviewprofile' element={<EmployeeViewProfile/>} />
+          <Route path='/employeeeditprofile' element={<EmployeeEditProfile/>} />
           {/* <Route path='/myPayroll' element={<MyPayroll />} />
           <Route path='/MyProfile' element={<MyProfile />} />
           <Route path='/payrollLogs' element={<PayrollLogs />} />

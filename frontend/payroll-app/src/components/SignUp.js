@@ -11,65 +11,11 @@ export const SignUp = () => {
     const [errorMsg, setErrorMsg] = useState('');
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const navigate = useNavigate();
-    // const regEx = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    // const [lowerValidated, setLowerValidated] = useState(false);
-    // const [upperValidated, setUpperValidated] = useState(false);
-    // const [numberValidated, setNumberValidated] = useState(false);
-    // const [specialValidated, setSpecialValidated] = useState(false);
-    // const [lengthValidated, setLengthValidated] = useState(false);
-
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(email);
         console.log(password);
-        // console.log(regEx.test(email));
-        // console.log(password.length);
-
-        // const lower = new RegExp('(?=.*[a-z])');
-        // const upper = new RegExp('(?=.*[A-Z])');
-        // const number = new RegExp('(?=.*[0-9])');
-        // const special = new RegExp('(?=.*[!@#\$%\^&\*])');
-        // const length = new RegExp ('(?=.{8,})');
-
-        // if (length.test(password)) {
-        //     setLengthValidated(true);
-        // } else {
-        //     setLengthValidated(false);
-        // }
-
-        // if (special.test(password)) {
-        //     setSpecialValidated(true);
-        // } else {
-        //     setSpecialValidated(false);
-        // }
-
-        // if (number.test(password)) {
-        //     setNumberValidated(true);
-        // } else {
-        //     setNumberValidated(false);
-        // }
-
-        // if (upper.test(password)) {
-        //     setUpperValidated(true);
-        // } else {
-        //     setUpperValidated(false);
-        // }
-
-        // if (lower.test(password)) {
-        //     setLowerValidated(true);
-        // } else {
-        //     setLowerValidated(false);
-        // }
-
-
-
-        // if (email && password) {
-
-        //     if (regEx.test(email) === true && lowerValidated === true && upperValidated === true && numberValidated === true && specialValidated === true && lengthValidated === true) {
-
 
         axios.post('http://localhost:3001/api/employees', { email, password })
             .then(result => {
@@ -86,27 +32,6 @@ export const SignUp = () => {
 
             })
             .catch(error => console.log(error))
-
-
-        //     } else if (!regEx.test(email) === true) {
-        //         setErrorMsg('Invalid Email!')
-        //     } else if (lengthValidated === false) {
-        //         setErrorMsg('At least 8 characters')
-        //     } else if (specialValidated === false) {
-        //         setErrorMsg('At least one special character')
-        //     } else if (numberValidated === false) {
-        //         setErrorMsg('At least one number')
-        //     } else if (upperValidated === false) {
-        //         setErrorMsg('At least one upper character')
-        //     } else {
-        //         setErrorMsg('At least lower character')
-        //     }
-
-
-        // } else {
-        //     setErrorMsg('Input fields!')
-        // }
-
 
 
     }

@@ -8,14 +8,13 @@ export const LoginEmployee = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMsg, setErrorMsg] = useState('');
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault()
        axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/api/auth-employee', { email, password })
+        axios.post('http://localhost:3001/api/auth/employee', { email, password })
             .then(result => {
                 // console.log(result.data)
                 if (result.data.errors) {
@@ -59,7 +58,6 @@ export const LoginEmployee = () => {
                 {backendErrorMsg && backendErrorMsg.map(e => (
                     <p>{e.msg}</p>
                 ))}
-                {errorMsg && <p>{errorMsg}</p>}
 
 
             </div>

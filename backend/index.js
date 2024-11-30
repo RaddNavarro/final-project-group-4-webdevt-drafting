@@ -10,15 +10,11 @@ const { authEmp } = require('./middleware/authEmp.js')
 const { authAdmin } = require('./middleware/authAdmin.js')
 
 
-// const connectDB1 = require('../frontend/payroll-app/src/components/LoginAs.js');
 const app = express();
 connectDB();
 
 // Init middleware???
 app.use(express.json({ extended: false }))
-
-
-// app.get('/', (req, res) => res.send('API Running'));
 
 
 app.use(cors({
@@ -57,8 +53,8 @@ app.get('/logoutAdmin', (req, res) => {
 app.use('/api/employees', require('./routes/api/employees.js'));
 app.use('/api/admins', require('./routes/api/admin.js'));
 app.use('/api/profile', require('./routes/api/profiles.js'));
-app.use('/api/auth-employee', require('./routes/api/auth-employee.js'));
-app.use('/api/auth-admin', require('./routes/api/auth-admin.js'));
+app.use('/api/auth', require('./routes/api/authRoute.js'));
+
 
 // test connection
 const PORT = process.env.PORT || 3001;

@@ -5,17 +5,29 @@ const SalaryLogsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'registers-employee'
     },
+    firstName: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'profiles'
+    },
+    lastName: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'profiles'
+    },
     hoursWorked: {
-        type: Number
+        type: Number,
+        required: true 
     },
     hourlyRate: {
-        type: Number
+        type: Number,
+        required: true 
     },
     grossPay: {
-        type: Number
+        type: Number,
+        
     },
     deductions: {
-        type: Number
+        type: Number,
+        
     },
     netPay: {
         type: Number

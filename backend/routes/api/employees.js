@@ -16,9 +16,6 @@ const Employees = require('../../models/Employees');
 router.post('/', [
     check('email', 'Email is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
-    // check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8 }),
-    // check('password', 'Please enter a password with at least one upper').isUppercase()
-    // check('password', 'Please enter a password with at least one number').isAlphanumeric(),
     check('password', 'Please enter a strong password: At least one upper, lower, special character and number').isStrongPassword({ minUppercase: 1, minLength: 8, minLowercase: 1, minNumbers: 1, minSymbols: 1 })
 ], async (req, res) => {
     const errors = validationResult(req);

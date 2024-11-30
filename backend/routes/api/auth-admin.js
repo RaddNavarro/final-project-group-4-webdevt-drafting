@@ -65,7 +65,7 @@ router.post('/', [
         const token = jwt.sign(
             payload,
             config.get('jwtTokenAdmins'),
-            { expiresIn: "3h" });
+            { expiresIn: "1h" });
 
         res.cookie('jwtTokenAdmins', token);
         res.json({ token })
