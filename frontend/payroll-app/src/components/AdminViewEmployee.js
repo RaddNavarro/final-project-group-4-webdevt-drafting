@@ -7,6 +7,7 @@ import axios from 'axios';
 export const AdminViewEmployee = () => {
 
     const [auth, setAuth] = useState(false);
+    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -26,6 +27,14 @@ export const AdminViewEmployee = () => {
             })
             .catch(error => console.log(error))
 
+        axios.get('http://localhost:3001/api/profile/all')
+            .then(res => {
+                setUsers(res.data)
+                console.log(res.data)
+
+
+            })
+            .catch(error => console.log(error))
 
 
     }, [])
@@ -49,7 +58,25 @@ export const AdminViewEmployee = () => {
                         <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
+                        <br /> <br /> <br />
+
+
+                        {
+                            users &&
+                            users.map(users => (
+                                <>
+                                <p>Email: {users.employees.email} </p>
+                            <p>First Name: {users.firstName} </p>
+                            <p>Last Name: {users.lastName} </p>
+                            <p>Contact: {users.contactNum} </p>
+                            <p>Address: {users.address} </p>
+                            </>
+                            ))
+                        } 
+
                     </>
+
+                    
                     :
                     <>
                         <h2>Please Log in first</h2>

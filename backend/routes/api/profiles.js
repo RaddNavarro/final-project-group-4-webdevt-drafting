@@ -86,4 +86,20 @@ router.post('/', [auth, [check('firstName', 'First Name is required').not().isEm
 
 )
 
+router.get('/all', async (req, res) => {
+    try {
+    // get fields from employees
+        const profile = await Profile.find().populate('employees',
+            ['email']
+        );
+
+
+        res.json(profile);
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error'); 
+    }
+});
+
 module.exports = router;

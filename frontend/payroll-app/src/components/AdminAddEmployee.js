@@ -8,6 +8,7 @@ import axios from 'axios';
 export const AdminAddEmployee = () => {
 
     const [auth, setAuth] = useState(false);
+    
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -26,6 +27,9 @@ export const AdminAddEmployee = () => {
 
             })
             .catch(error => console.log(error))
+
+
+        
 
 
 
