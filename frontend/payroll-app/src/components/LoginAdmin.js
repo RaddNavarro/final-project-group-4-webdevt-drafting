@@ -15,7 +15,7 @@ export const LoginAdmin = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/api/auth-admin', { email, password })
+        axios.post('http://localhost:3001/api/auth/admin', { email, password })
             .then(result => {
                 if (result.data.errors) {
                     setBackendErrorMsg(result.data.errors)
@@ -53,7 +53,7 @@ export const LoginAdmin = () => {
 
                 <button type="button" class="btn btn-primary" onClick={handleSubmit}>Log In</button>
                 <br></br>
-                <NavLink to='/signUp' style={{ textDecoration: 'none', color: 'black' }}>Create Account</NavLink>
+                <NavLink to='/signUp' style={{ textDecoration: 'none', color: 'black' }}>Create Account for employee</NavLink>
                 <br></br>
                 <NavLink to='/loginAs' style={{ textDecoration: 'none', color: 'black' }}>Back</NavLink>
                 {backendErrorMsg && backendErrorMsg.map(e => (

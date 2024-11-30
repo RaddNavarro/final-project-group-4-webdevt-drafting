@@ -3,23 +3,24 @@ const mongoose = require('mongoose');
 const ProfileSchema = new mongoose.Schema({
     employees: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'registers-employee'
+        ref: 'registers-employees'
     },
     firstName: {
-        type: String
+        type: String,
+        required: true 
     },
     lastName: {
-        type: String
+        type: String,
+        required: true 
     },
-    middleName: {
-        type: String
-    },
-    contact: {
-        type: String
+    contactNum: {
+        type: String,
+        required: true 
     },
     address: {
-        type: String
+        type: String,
+        required: true 
     }
 })
 
-module.exports = Profile = mongoose.model('profile', ProfileSchema);
+module.exports = Profile = mongoose.model('profiles', ProfileSchema);

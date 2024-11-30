@@ -12,7 +12,7 @@ const Employees = require('../../models/Employees');
 
 
 
-// @route   GET api/auth-employee
+// @route   GET api/auth for employees
 // @desc    Test route
 // @access  Public
 
@@ -69,7 +69,7 @@ router.post('/', [
         const token = jwt.sign(
             payload,
             config.get('jwtTokenEmployees'),
-            { expiresIn: "3h" });
+            { expiresIn: "1h" });
 
         res.cookie('jwtTokenEmployees', token);
         res.json({ token })

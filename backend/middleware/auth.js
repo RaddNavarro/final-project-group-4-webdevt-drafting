@@ -3,10 +3,10 @@ const config = require('config');
 
 module.exports = function (req, res, next) {
     // Get  token from header
-    const token = req.header('x-auth-token');
+    // const token = req.header('x-auth-token');
 
     // get token from cookie
-    // const token = req.cookies.jwtTokenEmployees;
+    const token = req.cookies.jwtTokenEmployees;
 
     // Check if no token 
     if (!token) {
