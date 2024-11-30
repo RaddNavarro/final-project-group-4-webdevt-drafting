@@ -37,6 +37,7 @@ export const EmployeeViewProfile = () => {
                     setBackendErrorMsg([]);
                     
                     setUser(res.data)
+                    console.log(user);
 
                 }
 
@@ -87,7 +88,7 @@ export const EmployeeViewProfile = () => {
                             <p>Address: {user.address} </p>
                             
                             
-                            </>
+                             </> 
                         
                                 
                                 :
@@ -95,7 +96,7 @@ export const EmployeeViewProfile = () => {
                                     <h1>Welcome, User</h1>
                                     {backendErrorMsg && <p>{backendErrorMsg}</p>}
                                 </>
-                        }
+                        } 
 
                     </>
                     :
