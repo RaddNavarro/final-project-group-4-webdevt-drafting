@@ -7,6 +7,8 @@ const { check, validationResult } = require('express-validator');
 
 // get admin db
 const Admins = require('../../models/Admins');
+const Employees = require('../../models/Employees');
+const SalaryLogsSchema = require('../../models/SalaryLogs');
 
 
 // @route   GET api/admins
@@ -74,5 +76,79 @@ router.post('/', [
 
     }
 );
+
+router.post('/generate', [check('email', 'Email is required').not().isEmpty(),
+    check('hoursWorked', 'Hours Worked is required').not().isEmpty(),
+    check('hoursWorked', 'Numbers only').isNumeric(),
+    check('hourlyRate', 'Hourly Rate is required').not().isEmpty(),
+    check('hourlyRate', 'Numbers only').isNumeric(),
+], async (req, res) => {
+
+    const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.json({ errors: errors.array() });
+
+        }
+
+        const {
+            hoursWorked,
+            hourlyRate,
+            grossPay,
+            deductions,
+            netPay
+        } = req.body;
+        // finding the employee in the employees table
+        let employees = await Employees.findOne({ email: req.body.email });
+        
+        const SalaryFields = {};
+        // making the salary object
+        SalaryFields.employees = employees.id;
+        if (hoursWorked) SalaryFields.hoursWorked = hoursWorked;
+        if (hourlyRate) SalaryFields.hourlyRate = hourlyRate;
+        SalaryFields.grossPay = grossPay;
+        SalaryFields.deductions = deductions;
+        SalaryFields.netPay = netPay;
+
+        try {
+            let salary = await SalaryLogsSchema.findOne({ employees: employees.id });
+
+            if (salary) {
+                salary = await SalaryLogsSchema.findOneAndUpdate(
+                    { employees: employees.id },
+                    { $set: SalaryFields },
+                    { new: true }
+                );
+                
+                return res.json(salary);
+            }
+
+            salary = new SalaryLogsSchema(SalaryFields);
+
+            await salary.save();
+            res.json(salary);
+            
+
+
+        } catch (error) {
+            console.error(error.message);
+            res.send('Server Error')
+        }
+
+
+})
+
+router.get('/salary', async (req, res) => {
+    try {
+    // get fields from employees
+        const salary = await SalaryLogsSchema.find().populate('employees', ['email', 'firstName', 'lastName']);
+
+       
+        res.json(salary);
+        
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error'); 
+    }
+});
 
 module.exports = router;

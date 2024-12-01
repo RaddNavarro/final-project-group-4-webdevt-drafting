@@ -6,9 +6,9 @@ import axios from 'axios';
 export const EmployeeViewProfile = () => {
     const [auth, setAuth] = useState(false);
     const [backendErrorMsg, setBackendErrorMsg] = useState('');
-    const [user, setUser] = useState();
+    const [user, setUser] = useState([]);
     const navigate = useNavigate();
-    
+
     axios.defaults.withCredentials = true;
     useEffect(() => {
 
@@ -28,14 +28,14 @@ export const EmployeeViewProfile = () => {
             .catch(error => console.log(error))
 
 
-        axios.get('http://localhost:3001/api/profile/me')
+        axios.get('http://localhost:3001/api/employees/me')
             .then(res => {
-                console.log(res.data)
+                console.log(res.data);
                 if (res.data.msg) {
                     setBackendErrorMsg(res.data.msg);
                 } else {
                     setBackendErrorMsg([]);
-                    
+
                     setUser(res.data)
                     console.log(user);
 
@@ -71,32 +71,29 @@ export const EmployeeViewProfile = () => {
                         <NavLink to='/employeeleaverequest'>
                             <button type="button" class="btn btn-primary">Leave Request</button>
                         </NavLink>
-                        <NavLink to='/employeeeditprofile'>
-                            <button type="button" class="btn btn-primary">Edit Profile</button>
-                        </NavLink>
 
                         <button type="button" class="btn btn-danger" onClick={handleLogout}>Log Out</button>
                         <br /> <br /> <br /> <br />
 
                         {
                             user ?
-                            <>
-                            <p>Email: {user.employees.email} </p>
-                            <p>First Name: {user.firstName} </p>
-                            <p>Last Name: {user.lastName} </p>
-                            <p>Contact: {user.contactNum} </p>
-                            <p>Address: {user.address} </p>
-                            
-                            
-                             </> 
-                        
-                                
+                                <>
+                                    <p>Email: {user.email} </p>
+                                    <p>First Name: {user.firstName} </p>
+                                    <p>Last Name: {user.lastName} </p>
+                                    <p>Contact: {user.contactNum} </p>
+                                    <p>Address: {user.address} </p>
+
+
+                                </>
+
+
                                 :
                                 <>
                                     <h1>Welcome, User</h1>
                                     {backendErrorMsg && <p>{backendErrorMsg}</p>}
                                 </>
-                        } 
+                        }
 
                     </>
                     :

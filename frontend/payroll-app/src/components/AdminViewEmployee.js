@@ -27,7 +27,7 @@ export const AdminViewEmployee = () => {
             })
             .catch(error => console.log(error))
 
-        axios.get('http://localhost:3001/api/profile/all')
+        axios.get('http://localhost:3001/api/employees/all')
             .then(res => {
                 setUsers(res.data)
                 console.log(res.data)
@@ -46,8 +46,14 @@ export const AdminViewEmployee = () => {
                 auth ?
                     <>
                         <h1>View Employees here</h1>
+                        <NavLink to='/homeAdmin'>
+                            <button type="button" class="btn btn-primary">Home</button>
+                        </NavLink>
                         <NavLink to='/adminaddemployee'>
                             <button type="button" class="btn btn-primary">Add Employee</button>
+                        </NavLink>
+                        <NavLink to='/admineditprofile'>
+                            <button type="button" class="btn btn-primary">Edit Employee Profile</button>
                         </NavLink>
                         <NavLink to='/admingeneratesalaryreport'>
                             <button type="button" class="btn btn-primary">Generate Salary Report</button>
@@ -65,7 +71,7 @@ export const AdminViewEmployee = () => {
                             users &&
                             users.map(users => (
                                 <>
-                                <p>Email: {users.employees.email} </p>
+                                <p>Email: {users.email} </p>
                             <p>First Name: {users.firstName} </p>
                             <p>Last Name: {users.lastName} </p>
                             <p>Contact: {users.contactNum} </p>

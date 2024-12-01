@@ -31,7 +31,7 @@ export const HomeAdmin = () => {
 
     }, [])
 
-    const handleLogout = () => {
+    const handleLogout = (e) => {
         axios.get('http://localhost:3001/logoutAdmin')
             .then(res => {
                 window.location.reload(true);
@@ -47,19 +47,22 @@ export const HomeAdmin = () => {
 
                     <>
                         <h1>Home Page: Admin</h1>
-                        <NavLink to='/AdminAddEmployee'>
+                        <NavLink to='/adminaddemployee'>
                             <button type="button" class="btn btn-primary">Add Employees</button>
                         </NavLink>
-                        <NavLink to='/AdminViewEmployee'>
+                        <NavLink to='/adminviewemployee'>
+                            <NavLink to='/admineditprofile'>
+                                <button type="button" class="btn btn-primary">Edit Employee Profile</button>
+                            </NavLink>
                             <button type="button" class="btn btn-primary">View Employee</button>
                         </NavLink>
-                        <NavLink to='/AdminGenerateSalaryReport'>
+                        <NavLink to='/admingeneratesalaryreport'>
                             <button type="button" class="btn btn-primary">Generate Salary Report</button>
                         </NavLink>
-                        <NavLink to='/AdminManageLeave'>
+                        <NavLink to='/adminmanageleave'>
                             <button type="button" class="btn btn-primary">Manage Leave request</button>
                         </NavLink>
-                        <NavLink to='/AdminViewAllSalary'>
+                        <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
                         <button type="button" class="btn btn-danger" onClick={handleLogout}>Log Out</button>
@@ -71,6 +74,7 @@ export const HomeAdmin = () => {
                             <button type="button" class="btn btn-primary">Login</button>
                         </NavLink>
                     </>
+
             }
 
         </>

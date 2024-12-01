@@ -53,8 +53,6 @@ export const LoginAdmin = () => {
 
                 <button type="button" class="btn btn-primary" onClick={handleSubmit}>Log In</button>
                 <br></br>
-                <NavLink to='/signUp' style={{ textDecoration: 'none', color: 'black' }}>Create Account for employee</NavLink>
-                <br></br>
                 <NavLink to='/loginAs' style={{ textDecoration: 'none', color: 'black' }}>Back</NavLink>
                 {backendErrorMsg && backendErrorMsg.map(e => (
                     <p>{e.msg}</p>
