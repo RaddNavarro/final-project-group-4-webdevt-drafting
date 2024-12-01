@@ -3,15 +3,7 @@ const mongoose = require('mongoose');
 const SalaryLogsSchema = new mongoose.Schema({
     employees: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'registers-employee'
-    },
-    firstName: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'profiles'
-    },
-    lastName: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'profiles'
+        ref: 'registers-employees'
     },
     hoursWorked: {
         type: Number,
@@ -23,14 +15,18 @@ const SalaryLogsSchema = new mongoose.Schema({
     },
     grossPay: {
         type: Number,
+        default: 0
         
     },
     deductions: {
         type: Number,
+        default: 0
         
     },
     netPay: {
-        type: Number
+        type: Number,
+        default: 0
+        
     }
 })
 

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-export const EmployeeEditProfile = () => {
+export const AdminEditProfile = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -12,17 +12,19 @@ export const EmployeeEditProfile = () => {
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const [msg, setMsg] = useState('');
     const [auth, setAuth] = useState(false);
+    const [employees, setEmployees] = useState([]);
+    const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
     useEffect(() => {
 
-        axios.get('http://localhost:3001/emp')
+        axios.get('http://localhost:3001/admin')
             .then(res => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/employeeeditprofile')
+                    navigate('/admineditprofile')
                 } else {
                     setAuth(false);
                     console.log(res.data)
@@ -32,6 +34,16 @@ export const EmployeeEditProfile = () => {
             })
             .catch(error => console.log(error))
 
+        axios.get('http://localhost:3001/api/employees/all')
+            .then(res => {
+                console.log(res.data)
+                setEmployees(res.data);
+
+            })
+            .catch(error => console.log(error))
+
+
+
 
 
     }, [])
@@ -40,7 +52,7 @@ export const EmployeeEditProfile = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/api/profile', { firstName, lastName, contactNum, address })
+        axios.post('http://localhost:3001/api/employees/edit', { email, firstName, lastName, contactNum, address })
             .then(result => {
                 if (result.data.errors) {
                     setBackendErrorMsg('');
@@ -51,18 +63,12 @@ export const EmployeeEditProfile = () => {
                     setBackendErrorMsg('');
                     setMsg('Changes Saved')
                 }
-                
-                
+
+
             })
             .catch(error => console.log(error))
     }
-    const handleLogout = () => {
-        axios.get('http://localhost:3001/logout')
-            .then(res => {
-                window.location.reload(true);
-            })
-            .catch(error => console.log(error))
-    }
+
 
     return (
         <>
@@ -70,22 +76,34 @@ export const EmployeeEditProfile = () => {
                 auth ?
                     <>
                         <h1>Edit Profile</h1>
-                        <NavLink to='/homeEmployee'>
+                        <NavLink to='/homeAdmin'>
                             <button type="button" class="btn btn-primary">Home</button>
                         </NavLink>
-                        <NavLink to='/employeeviewsalaryreport'>
-                            <button type="button" class="btn btn-primary">View salary reports</button>
+                        <NavLink to='/adminaddemployee'>
+                            <button type="button" class="btn btn-primary">Add Employee</button>
+                        </NavLink>
+                        <NavLink to='/adminviewemployee'>
+                            <button type="button" class="btn btn-primary">View Employees</button>
+                        </NavLink>
+                        <NavLink to='/admingeneratesalaryreport'>
+                            <button type="button" class="btn btn-primary">Generate Salary Report</button>
+                        </NavLink>
+                        <NavLink to='/adminmanageleave'>
+                            <button type="button" class="btn btn-primary">Manage Leave request</button>
+                        </NavLink>
+                        <NavLink to='/adminviewallsalary'>
+                            <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
 
-                        <NavLink to='/employeeleaverequest'>
-                            <button type="button" class="btn btn-primary">Leave Request</button>
-                        </NavLink>
-                        <NavLink to='/employeeviewprofile'>
-                            <button type="button" class="btn btn-primary">View Profile</button>
-                        </NavLink>
-                        <button type="button" class="btn btn-danger" onClick={handleLogout}>Log Out</button>
                         <br /> <br />
                         <form>
+                        <label for="inputFirstName">Select Employee to edit</label>
+                            <select class="form-select" aria-label="Default select example" value={email} onChange={(e) => setEmail(e.target.value)}>
+                                <option>Select Employee email...</option>
+                                {
+                                    employees.map(emp => <option>{emp.email}</option>)
+                                }
+                            </select>   
                             <div class="mb-3">
                                 <label for="inputFirstName">Enter first name</label>
                                 <input class="form-control" type="text" placeholder="First Name" aria-label="default input example" onChange={(e) => setFirstName(e.target.value)}></input>
@@ -106,7 +124,7 @@ export const EmployeeEditProfile = () => {
                                 <label for="exampleInputPassword1" class="form-label">Enter address</label>
                                 <input class="form-control" type="text" placeholder="Address" aria-label="default input example" onChange={(e) => setAddress(e.target.value)}></input>
 
-                            
+
                             </div>
                         </form>
 

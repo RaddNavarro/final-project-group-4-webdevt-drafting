@@ -46,11 +46,12 @@ export const HomeEmployee = () => {
                         <NavLink to='/employeeleaverequest'>
                             <button type="button" class="btn btn-primary">Leave Request</button>
                         </NavLink>
+                        
                     </>
 
                     :
                     <>
-                       <h2>Please Log in first</h2>
+                        <h2>Please Log in first</h2>
                         <NavLink to='/loginAs'>
                             <button type="button" class="btn btn-primary">Login</button>
                         </NavLink>

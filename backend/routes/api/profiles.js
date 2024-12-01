@@ -15,7 +15,7 @@ const Profile = require('../../models/Profile');
 router.get('/me', auth, async (req, res) => {
     try {
     // get fields from employees
-        const profile = await Profile.findOne({ employees: req.employees.id }).populate('employees',
+        const profile = await Employee.findOne({ employees: req.employees.id }).populate('employees',
             ['email']
         );
 

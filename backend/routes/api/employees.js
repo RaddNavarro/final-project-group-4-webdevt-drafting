@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const auth = require('../../middleware/auth')
 const { check, validationResult } = require('express-validator');
 
 // get employee db
@@ -16,7 +17,11 @@ const Employees = require('../../models/Employees');
 router.post('/', [
     check('email', 'Email is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please enter a strong password: At least one upper, lower, special character and number').isStrongPassword({ minUppercase: 1, minLength: 8, minLowercase: 1, minNumbers: 1, minSymbols: 1 })
+    check('password', 'Please enter a strong password: At least one upper, lower, special character and number').isStrongPassword({ minUppercase: 1, minLength: 8, minLowercase: 1, minNumbers: 1, minSymbols: 1 }),
+    check('firstName', 'First Name is required').not().isEmpty(),
+    check('lastName', 'Last name is required').not().isEmpty(),
+    check('contactNum', 'Contact is required').not().isEmpty(),
+    check('address', 'Address is required').not().isEmpty()
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -24,7 +29,7 @@ router.post('/', [
         return res.json(errors);
     }
 
-    const { email, password } = req.body;
+    const { email, password, firstName, lastName, contactNum, address } = req.body;
 
     try {
 
@@ -37,7 +42,11 @@ router.post('/', [
         // make employees object
         employees = new Employees({
             email,
-            password
+            password,
+            firstName,
+            lastName,
+            contactNum,
+            address
         });
 
         // encrypting the password
@@ -74,5 +83,95 @@ router.post('/', [
 
     }
 );
+
+router.post('/edit', [ check('email', 'Email is required').not().isEmpty(),
+    check('firstName', 'First Name is required').not().isEmpty(),
+    check('lastName', 'Last name is required').not().isEmpty(),
+    check('contactNum', 'Contact is required').not().isEmpty(),
+    check('address', 'Address is required').not().isEmpty()
+    ]
+    , async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.json({ errors: errors.array() });
+
+        }
+
+        const {
+            firstName,
+            lastName,
+            contactNum,
+            address
+        } = req.body;
+
+        const employeeFields = {};
+        // making the employee object
+        employeeFields.email = req.body.email;
+        employeeFields.password = req.body.password;
+        if (firstName) employeeFields.firstName = firstName;
+        if (lastName) employeeFields.lastName = lastName;
+        if (contactNum) employeeFields.contactNum = contactNum;
+        if (address) employeeFields.address = address;
+
+        try {
+            let employee = await Employees.findOne({ email: req.body.email })
+
+            if (employee) {
+                // updating the employee
+                employee = await Employees.findOneAndUpdate(
+                    { email: req.body.email },
+                    { $set: employeeFields },
+                    { new: true }
+                );
+                
+                return res.json(employee);
+            }
+
+            // creating the employee
+            employee = new Employees(employeeFields);
+
+            await employee.save();
+            res.json(employee);
+        } catch (error) {
+            res.json(employeeFields)
+            console.error(error.message);
+            res.send('Server Error')
+        }
+
+    }
+
+)
+
+router.get('/me', auth, async (req, res) => {
+    try {
+    // get fields from employees
+        const profile = await Employees.findOne({ _id: req.employees.id });
+
+        if (!profile) {
+        //    return res.json(profile);
+            return res.json({ msg: 'There is no profile for this user'});
+        }
+
+        res.json(profile);
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error'); 
+    }
+});
+
+router.get('/all', async (req, res) => {
+    try {
+    // get fields from employees
+        const employee = await Employees.find().populate();
+
+
+        res.json(employee);
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error'); 
+    }
+});
 
 module.exports = router;
