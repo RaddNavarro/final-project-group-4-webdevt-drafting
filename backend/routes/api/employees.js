@@ -9,6 +9,7 @@ const { check, validationResult } = require('express-validator');
 // get employee db
 const Employees = require('../../models/Employees');
 const SalaryLogs = require('../../models/SalaryLogs');
+const LeaveRequestModel = require('../../models/LeaveRequests');
 
 
 // @route   GET api/employees
@@ -189,14 +190,32 @@ router.get('/salary', auth, async (req, res) => {
     }
 });
 
-router.post('/leave', auth, async (req, res) => {
-    try {
-        // rEMOVE employee
-        await Employees.findOneAndDelete({ _id: req.employees.id });
-        // remove their salary log
-        await SalaryLogs.findOneAndDelete({ employees: req.employees.id });
+router.post('/leave', auth, [check('numDays', 'Number of days is required').not().isEmpty(),
+    check('numDays', 'Number of days must be a number').isNumeric,
+    check('startDate', 'Start Date is required').not().isEmpty(),
+    check('endDate', 'End Date is required').not().isEmpty(),
+    check('leaveType', 'Leave Type is required').not().isEmpty(),
 
-        res.json({ msg: 'Employee deleted' });
+], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        return res.json(errors);
+    }
+
+    const { numDays, startDate, endDate, leaveType } = req.body
+    try {
+        
+        const LeaveField = {};
+    // making the salary object
+    SalaryFields.employees = employees.id;
+    if (hoursWorked) SalaryFields.hoursWorked = hoursWorked;
+    if (hourlyRate) SalaryFields.hourlyRate = hourlyRate;
+    SalaryFields.grossPay = grossPay;
+    SalaryFields.deductions = deductions;
+    SalaryFields.netPay = netPay;
+    SalaryFields.basicSalary = basicSalary;
 
     } catch (error) {
         console.error(error.message);

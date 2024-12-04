@@ -61,7 +61,12 @@ export const EmployeeLeaveRequest = () => {
                             </div> 
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Enter Leave Type</label>
-                                <input class="form-control" type="text" placeholder="Select Leave Type" aria-label="default input example" onChange={(e) => setLeaveType(e.target.value)}></input>
+                                <select class="form-select" aria-label="Default select example" value={leaveType} onChange={(e) => setLeaveType(e.target.value)}>
+                                <option>Select Leave Type...</option>
+                                <option value="Casual Leave">Casual Leave</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Vacation">Vacation</option>
+                                </select>  
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Start Date</label>
