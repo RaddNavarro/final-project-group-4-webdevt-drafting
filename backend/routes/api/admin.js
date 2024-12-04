@@ -22,7 +22,7 @@ router.post('/', [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        
+
         return res.json(errors);
     }
 
@@ -33,7 +33,7 @@ router.post('/', [
         let admins = await Admins.findOne({ email });
 
         if (admins) {
-           return res.json('User already exists');
+            return res.json('User already exists');
         }
 
         // make employees object
@@ -59,7 +59,7 @@ router.post('/', [
         }
 
         jwt.sign(
-            payload, 
+            payload,
             config.get('jwtTokenAdmins'),
             { expiresIn: 360000 },
             (error, token) => {
@@ -74,80 +74,275 @@ router.post('/', [
     }
 
 
-    }
+}
 );
 
 router.post('/generate', [check('email', 'Email is required').not().isEmpty(),
-    check('hoursWorked', 'Hours Worked is required').not().isEmpty(),
-    check('hoursWorked', 'Numbers only').isNumeric(),
-    check('hourlyRate', 'Hourly Rate is required').not().isEmpty(),
-    check('hourlyRate', 'Numbers only').isNumeric(),
+check('hoursWorked', 'Total Hours Worked is required').not().isEmpty(),
+check('hoursWorked', 'Numbers only').isNumeric(),
+check('hourlyRate', 'Hourly Rate is required').not().isEmpty(),
+check('hourlyRate', 'Numbers only').isNumeric(),
 ], async (req, res) => {
 
     const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.json({ errors: errors.array() });
 
-        }
+    }
 
-        const {
-            hoursWorked,
-            hourlyRate,
-            grossPay,
-            deductions,
-            netPay
-        } = req.body;
-        // finding the employee in the employees table
-        let employees = await Employees.findOne({ email: req.body.email });
-        
-        const SalaryFields = {};
-        // making the salary object
-        SalaryFields.employees = employees.id;
-        if (hoursWorked) SalaryFields.hoursWorked = hoursWorked;
-        if (hourlyRate) SalaryFields.hourlyRate = hourlyRate;
-        SalaryFields.grossPay = grossPay;
-        SalaryFields.deductions = deductions;
-        SalaryFields.netPay = netPay;
+    let {
+        hoursWorked,
+        hourlyRate,
+        grossPay,
+        deductions,
+        netPay,
+        basicSalary
+    } = req.body;
 
-        try {
-            let salary = await SalaryLogsSchema.findOne({ employees: employees.id });
+    const maxHours = 171.2;
+    const minHours = 160;
+    let overtimePay = 0;
+    let overtimeHours = 0;
+    let tempGrossPay = 0;
+    var multiplicator = Math.pow(10, 2);
 
-            if (salary) {
-                salary = await SalaryLogsSchema.findOneAndUpdate(
-                    { employees: employees.id },
-                    { $set: SalaryFields },
-                    { new: true }
-                );
-                
-                return res.json(salary);
+    //check for overtime
+    if (hoursWorked <= maxHours) {
+
+        // check if employee didn't get withing avg working hours per month
+        if (hoursWorked < minHours) {
+
+            grossPay = hoursWorked * hourlyRate;
+            let annGrossPay = 0;
+
+
+            // getting annual gross pay
+            annGrossPay = grossPay * 12;
+
+            // income tax
+            if (annGrossPay > 250000 && annGrossPay <= 400000) {
+                deductions = ((annGrossPay * 0.15) / 12);
+            } else if (annGrossPay > 400000 && annGrossPay <= 800000) {
+                deductions = (((annGrossPay * 0.20) + 22500) / 12);
+            } else if (annGrossPay > 800000 && annGrossPay <= 2000000) {
+                deductions = (((annGrossPay * 0.25) + 102500) / 12);
+            } else if (annGrossPay > 2000000 && annGrossPay <= 8000000) {
+                deductions = (((annGrossPay * 0.30) + 402500) / 12);
+            } else if (annGrossPay > 8000000) {
+                deductions = (((annGrossPay * 0.35) + 2202500) / 12);
             }
 
-            salary = new SalaryLogsSchema(SalaryFields);
+            basicSalary = ((minHours * hourlyRate) * 0.4);
 
-            await salary.save();
-            res.json(salary);
+            // SSS deductions
+            deductions = deductions + (grossPay * 0.045);
+
+            // philhealth deductions
+            if (basicSalary > 10000 && basicSalary < 100000) {
+                deductions = deductions + (basicSalary * 0.05);
+            }
+
+            // pag-ibig deductions
+            if (grossPay > 1500) {
+                deductions = deductions + (grossPay * 0.02);
+            } else {
+                deductions = deductions + (grossPay * 0.01);
+            }
+
+            deductions = parseFloat((deductions * multiplicator).toFixed(11));
+            deductions = (Math.round(deductions) / multiplicator).toFixed(2);
+  
+            grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
+            grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
+
+
+            // compute for netPay
+            netPay = grossPay - deductions;
+            netPay = parseFloat((netPay * multiplicator).toFixed(11));
+            netPay = (Math.round(netPay) / multiplicator).toFixed(2);
             
 
+        } else {
+            grossPay = hoursWorked * hourlyRate;
+            let annGrossPay = 0;
 
-        } catch (error) {
-            console.error(error.message);
-            res.send('Server Error')
+
+            // getting annual gross pay
+            annGrossPay = grossPay * 12;
+
+            // income tax
+            if (annGrossPay > 250000 && annGrossPay <= 400000) {
+                deductions = ((annGrossPay * 0.15) / 12);
+            } else if (annGrossPay > 400000 && annGrossPay <= 800000) {
+                deductions = (((annGrossPay * 0.20) + 22500) / 12);
+            } else if (annGrossPay > 800000 && annGrossPay <= 2000000) {
+                deductions = (((annGrossPay * 0.25) + 102500) / 12);
+            } else if (annGrossPay > 2000000 && annGrossPay <= 8000000) {
+                deductions = (((annGrossPay * 0.30) + 402500) / 12);
+            } else if (annGrossPay > 8000000) {
+                deductions = (((annGrossPay * 0.35) + 2202500) / 12);
+            }
+
+            basicSalary = (grossPay * 0.4);
+
+            // SSS deductions
+            deductions = deductions + (grossPay * 0.045);
+
+            // philhealth deductions
+            if (basicSalary > 10000 && basicSalary < 100000) {
+                deductions = deductions + (basicSalary * 0.05);
+            }
+
+            // pag-ibig deductions
+            if (grossPay > 1500) {
+                deductions = deductions + (grossPay * 0.02);
+            } else {
+                deductions = deductions + (grossPay * 0.01);
+            }
+
+            // // deductions = parseFloat((deductions * multiplicator).toFixed(11));
+            // // deductions = (Math.round(deductions) / multiplicator).toFixed(2);
+        
+            grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
+            grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
+
+            // compute for netPay
+            netPay = grossPay - deductions;
+            netPay = parseFloat((netPay * multiplicator).toFixed(11));
+            netPay = (Math.round(netPay) / multiplicator).toFixed(2);
+
         }
+    } else {
+        // including overtime
+        overtimeHours = hoursWorked - maxHours;
+
+        grossPay = maxHours * hourlyRate;
+        overtimePay = overtimeHours * (hourlyRate * 1.25);
+        grossPay = grossPay + overtimePay;
+        let annGrossPay = 0;
+
+
+        // getting annual gross pay
+        annGrossPay = grossPay * 12;
+
+        // income tax
+        if (annGrossPay > 250000 && annGrossPay <= 400000) {
+            deductions = ((annGrossPay * 0.15) / 12);
+        } else if (annGrossPay > 400000 && annGrossPay <= 800000) {
+            deductions = (((annGrossPay * 0.20) + 22500) / 12);
+        } else if (annGrossPay > 800000 && annGrossPay <= 2000000) {
+            deductions = (((annGrossPay * 0.25) + 102500) / 12);
+        } else if (annGrossPay > 2000000 && annGrossPay <= 8000000) {
+            deductions = (((annGrossPay * 0.30) + 402500) / 12);
+        } else if (annGrossPay > 8000000) {
+            deductions = (((annGrossPay * 0.35) + 2202500) / 12);
+        }
+
+        basicSalary = (grossPay * 0.4);
+
+        // SSS deductions
+        deductions = deductions + (grossPay * 0.045);
+
+        // philhealth deductions
+        if (basicSalary > 10000 && basicSalary < 100000) {
+            deductions = deductions + (basicSalary * 0.05);
+        }
+
+        // pag-ibig deductions
+        if (grossPay > 1500) {
+            deductions = deductions + (grossPay * 0.02);
+        } else {
+            deductions = deductions + (grossPay * 0.01);
+        }
+
+            deductions = parseFloat((deductions * multiplicator).toFixed(11));
+            deductions = (Math.round(deductions) / multiplicator).toFixed(2);
+        
+            grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
+            grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
+
+        // compute for netPay
+        netPay = grossPay - deductions;
+        netPay = parseFloat((netPay * multiplicator).toFixed(11));
+        netPay = (Math.round(netPay) / multiplicator).toFixed(2);
+
+    }
+
+
+    // finding the employee in the employees table
+    let employees = await Employees.findOne({ email: req.body.email });
+
+
+
+
+    const SalaryFields = {};
+    // making the salary object
+    SalaryFields.employees = employees.id;
+    if (hoursWorked) SalaryFields.hoursWorked = hoursWorked;
+    if (hourlyRate) SalaryFields.hourlyRate = hourlyRate;
+    SalaryFields.grossPay = grossPay;
+    SalaryFields.deductions = deductions;
+    SalaryFields.netPay = netPay;
+    SalaryFields.basicSalary = basicSalary;
+
+    try {
+        let salary = await SalaryLogsSchema.findOne({ employees: employees.id });
+
+        if (salary) {
+            salary = await SalaryLogsSchema.findOneAndUpdate(
+                { employees: employees.id },
+                { $set: SalaryFields },
+                { new: true }
+            );
+
+            return res.json(salary);
+        }
+
+        salary = new SalaryLogsSchema(SalaryFields);
+
+        await salary.save();
+        res.json(salary);
+
+
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server Error')
+    }
 
 
 })
 
 router.get('/salary', async (req, res) => {
     try {
-    // get fields from employees
+        // get fields from employees
         const salary = await SalaryLogsSchema.find().populate('employees', ['email', 'firstName', 'lastName']);
 
-       
-        res.json(salary);
-        
+
+        res.send(salary);
+
     } catch (error) {
         console.error(error.message);
-        res.send('Server error'); 
+        res.send('Server error');
+    }
+});
+
+
+router.delete('/delete', async (req, res) => {
+    
+    try {
+        
+        
+        // rEMOVE employee
+        await Employees.findOneAndDelete({ _id: req.body.id });
+        // remove their salary log
+        await SalaryLogs.findOneAndDelete({ employees: req.body.id});
+
+        res.json({ msg: 'Employee deleted' });
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
     }
 });
 

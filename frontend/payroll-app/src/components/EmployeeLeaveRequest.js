@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, useNavigate } from "react-router-dom";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 
 export const EmployeeLeaveRequest = () => {
 
     const [auth, setAuth] = useState(false);
+    const [numDays, setNumDays] = useState();
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [leaveType, setLeaveType] = useState();
+    const [dateIssued, setDateIssued] = useState();
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -45,7 +52,36 @@ export const EmployeeLeaveRequest = () => {
                         <NavLink to='/employeeviewprofile'>
                             <button type="button" class="btn btn-primary">View Profile</button>
                         </NavLink>
-                        
+                        <br /> <br />
+
+                        <form>
+                            <div class="mb-3">
+                                <label for="inputFirstName">Enter number of days</label>
+                                <input class="form-control" type="number" placeholder="Number of days" aria-label="default input example" onChange={(e) => setNumDays(e.target.value)}></input>
+                            </div> 
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Enter Leave Type</label>
+                                <input class="form-control" type="text" placeholder="Select Leave Type" aria-label="default input example" onChange={(e) => setLeaveType(e.target.value)}></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Start Date</label>
+                                <DatePicker 
+                                selected={startDate}
+                                onChange={date => setStartDate(date)}
+                                dateFormat={"MM/dd/yyyy"}
+                                
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">End Date</label>
+                                <DatePicker 
+                                selected={endDate}
+                                onChange={date => setEndDate(date)}
+                                dateFormat={"MM/dd/yyyy"}
+                                minDate={startDate}
+                                />
+                            </div>
+                        </form>
 
                         
                     </>

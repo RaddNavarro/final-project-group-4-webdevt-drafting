@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 // get employee db
 const Employees = require('../../models/Employees');
+const SalaryLogs = require('../../models/SalaryLogs');
 
 
 // @route   GET api/employees
@@ -21,11 +22,12 @@ router.post('/', [
     check('firstName', 'First Name is required').not().isEmpty(),
     check('lastName', 'Last name is required').not().isEmpty(),
     check('contactNum', 'Contact is required').not().isEmpty(),
+    check('contactNum', 'Contact is required').isNumeric(),
     check('address', 'Address is required').not().isEmpty()
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        
+
         return res.json(errors);
     }
 
@@ -36,7 +38,7 @@ router.post('/', [
         let employees = await Employees.findOne({ email });
 
         if (employees) {
-           return res.json({ errors: [{ msg: 'User already exists' }] });
+            return res.json({ errors: [{ msg: 'User already exists' }] });
         }
 
         // make employees object
@@ -66,7 +68,7 @@ router.post('/', [
         }
 
         jwt.sign(
-            payload, 
+            payload,
             config.get('jwtTokenEmployees'),
             { expiresIn: 360000 },
             (error, token) => {
@@ -81,15 +83,15 @@ router.post('/', [
     }
 
 
-    }
+}
 );
 
-router.post('/edit', [ check('email', 'Email is required').not().isEmpty(),
-    check('firstName', 'First Name is required').not().isEmpty(),
-    check('lastName', 'Last name is required').not().isEmpty(),
-    check('contactNum', 'Contact is required').not().isEmpty(),
-    check('address', 'Address is required').not().isEmpty()
-    ]
+router.post('/edit', [check('email', 'Email is required').not().isEmpty(),
+check('firstName', 'First Name is required').not().isEmpty(),
+check('lastName', 'Last name is required').not().isEmpty(),
+check('contactNum', 'Contact is required').not().isEmpty(),
+check('address', 'Address is required').not().isEmpty()
+]
     , async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -123,7 +125,7 @@ router.post('/edit', [ check('email', 'Email is required').not().isEmpty(),
                     { $set: employeeFields },
                     { new: true }
                 );
-                
+
                 return res.json(employee);
             }
 
@@ -144,25 +146,25 @@ router.post('/edit', [ check('email', 'Email is required').not().isEmpty(),
 
 router.get('/me', auth, async (req, res) => {
     try {
-    // get fields from employees
+        // get fields from employees
         const profile = await Employees.findOne({ _id: req.employees.id });
 
         if (!profile) {
-        //    return res.json(profile);
-            return res.json({ msg: 'There is no profile for this user'});
+            //    return res.json(profile);
+            return res.json({ msg: 'There is no profile for this user' });
         }
 
-        res.json(profile);
+        res.send(profile);
 
     } catch (error) {
         console.error(error.message);
-        res.send('Server error'); 
+        res.send('Server error');
     }
 });
 
 router.get('/all', async (req, res) => {
     try {
-    // get fields from employees
+        // get fields from employees
         const employee = await Employees.find().populate();
 
 
@@ -170,8 +172,35 @@ router.get('/all', async (req, res) => {
 
     } catch (error) {
         console.error(error.message);
-        res.send('Server error'); 
+        res.send('Server error');
     }
 });
 
+router.get('/salary', auth, async (req, res) => {
+    try {
+        // get fields from salary logs collection
+        const salary = await SalaryLogs.find({ employees: req.employees.id }).populate('employees', ['email', 'firstName', 'lastName']);
+
+        res.send(salary);
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
+    }
+});
+
+router.post('/leave', auth, async (req, res) => {
+    try {
+        // rEMOVE employee
+        await Employees.findOneAndDelete({ _id: req.employees.id });
+        // remove their salary log
+        await SalaryLogs.findOneAndDelete({ employees: req.employees.id });
+
+        res.json({ msg: 'Employee deleted' });
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
+    }
+});
 module.exports = router;

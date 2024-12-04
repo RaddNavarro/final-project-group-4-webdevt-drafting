@@ -9,6 +9,26 @@ export const AdminViewAllSalary = () => {
     const [auth, setAuth] = useState(false);
     const [salary, setSalary] = useState([]);
     const navigate = useNavigate();
+    var grossPay;
+    var basicSalary;
+    var netPay;
+    
+    salary.map(salary => {
+
+        // formatting them to add commas in thousands
+        grossPay = salary.grossPay;
+        grossPay = grossPay.toLocaleString(undefined, {maximumFractionDigits:2})
+
+        basicSalary = salary.basicSalary;
+        basicSalary = basicSalary.toLocaleString(undefined, {maximumFractionDigits:2})
+
+        netPay = salary.netPay;
+        netPay = netPay.toLocaleString(undefined, {maximumFractionDigits:2})
+
+        
+    })
+
+
     axios.defaults.withCredentials = true;
     useEffect(() => {
 
@@ -71,10 +91,11 @@ export const AdminViewAllSalary = () => {
                                 <>
                                 <p>Email: {salary.employees.email}</p>
                                 <p>Name: {salary.employees.firstName} {salary.employees.lastName}</p>
-                                <p>Hours Worked: ₱{salary.hoursWorked}</p>
+                                <p>Hours Worked: {salary.hoursWorked} Hours</p>
                                 <p>Hourly Rate: ₱{salary.hourlyRate}</p>
-                                <p>Gross Pay: ₱{salary.grossPay}</p>
-                                <p>Net Pay: ₱{salary.netPay}</p>
+                                <p>Basic Salary: ₱{basicSalary}</p>
+                                <p>Gross Pay: ₱{grossPay}</p>
+                                <p>Net Pay: ₱{netPay}</p>
 
                                 
                                 </>

@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const AdminModel = require('./models/Admins.js');
 const EmployeeModel = require('./models/Employees.js');
@@ -14,8 +15,9 @@ const app = express();
 connectDB();
 
 // Init middleware???
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }))
-
+// app.use(bodyParser.json());
 
 app.use(cors({
     origin: ["http://localhost:3000"],
