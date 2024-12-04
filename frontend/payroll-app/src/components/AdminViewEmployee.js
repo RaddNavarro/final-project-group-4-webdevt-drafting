@@ -10,6 +10,8 @@ export const AdminViewEmployee = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
+
+
     useEffect(() => {
 
         axios.get('http://localhost:3001/admin')
@@ -27,6 +29,21 @@ export const AdminViewEmployee = () => {
             })
             .catch(error => console.log(error))
 
+            getAllEmployee();
+        // axios.get('http://localhost:3001/api/employees/all')
+        //     .then(res => {
+        //         setUsers(res.data)
+        //         console.log(res.data)
+
+
+        //     })
+        //     .catch(error => console.log(error))
+
+
+    }, [])
+
+    const getAllEmployee = () => {
+        axios.defaults.withCredentials = true;
         axios.get('http://localhost:3001/api/employees/all')
             .then(res => {
                 setUsers(res.data)
@@ -35,9 +52,22 @@ export const AdminViewEmployee = () => {
 
             })
             .catch(error => console.log(error))
+    }
 
+    const handleDelete = (id, name) => {
+        const temp = {id}
+        console.log(temp);
+        if (window.confirm(`Are you sure you want to delete ${name}`)) {
+            axios.defaults.withCredentials = true;
+            axios.delete('http://localhost:3001/api/admins/delete', {data: temp})
+            .then(res => {
+                alert(res.data.msg)
+                getAllEmployee();
 
-    }, [])
+            })
+            .catch(error => console.log(error))
+        } 
+    }
 
     return (
         <>
@@ -76,6 +106,9 @@ export const AdminViewEmployee = () => {
                             <p>Last Name: {users.lastName} </p>
                             <p>Contact: {users.contactNum} </p>
                             <p>Address: {users.address} </p>
+
+                            
+                            <button type="button" class="btn btn-danger" onClick={ () => handleDelete(users._id, users.firstName)}>Delete</button>
                             </>
                             ))
                         } 
