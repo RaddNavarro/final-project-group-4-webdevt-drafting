@@ -32,6 +32,6 @@ const LeaveRequestsSchema = new mongoose.Schema({
 })
     
 
-const LeaveRequestModel = mongoose.model("attendance", LeaveRequestsSchema);
+const LeaveRequestModel = mongoose.model("leave-requests", LeaveRequestsSchema);
 
 module.exports = LeaveRequestModel;

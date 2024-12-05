@@ -6,6 +6,7 @@ import axios from 'axios';
 export const AdminManageLeave = () => {
 
     const [auth, setAuth] = useState(false);
+    const [requests, setRequests] = useState([]);
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -21,6 +22,13 @@ export const AdminManageLeave = () => {
                     console.log(res.data)
 
                 }
+
+            })
+            .catch(error => console.log(error))
+
+            axios.get('http://localhost:3001/api/admins/leave-requests')
+            .then(res => {
+                setRequests(res.data);
 
             })
             .catch(error => console.log(error))
@@ -53,6 +61,24 @@ export const AdminManageLeave = () => {
                         <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
+                        <br /> <br /> <br />
+
+
+                        {
+                            requests &&
+                            requests.map(request => (
+                                <>
+                                <p>Name: {request.employees.firstName} {request.employees.lastName} </p>
+                            <p>Date Issued: {request.dateIssued}</p>
+                            <p>Leave Type: {request.leaveType}</p>
+                            <p>Number of Days: {request.numDays} </p>
+                            
+
+                            
+                           
+                            </>
+                            ))
+                        } 
 
                     </>
                     :

@@ -9,6 +9,7 @@ const { check, validationResult } = require('express-validator');
 const Admins = require('../../models/Admins');
 const Employees = require('../../models/Employees');
 const SalaryLogsSchema = require('../../models/SalaryLogs');
+const LeaveRequestModel = require('../../models/LeaveRequests');
 
 
 // @route   GET api/admins
@@ -345,5 +346,20 @@ router.delete('/delete', async (req, res) => {
         res.send('Server error');
     }
 });
+
+router.get('/leave-requests', async (req, res) => {
+
+    try {
+        // get fields from employees
+        const leave = await LeaveRequestModel.find().populate('employees', ['firstName', 'lastName']);
+
+        res.json(leave);
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
+    }
+
+})
 
 module.exports = router;

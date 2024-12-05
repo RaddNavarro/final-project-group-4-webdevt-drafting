@@ -191,35 +191,47 @@ router.get('/salary', auth, async (req, res) => {
 });
 
 router.post('/leave', auth, [check('numDays', 'Number of days is required').not().isEmpty(),
-    check('numDays', 'Number of days must be a number').isNumeric,
-    check('startDate', 'Start Date is required').not().isEmpty(),
-    check('endDate', 'End Date is required').not().isEmpty(),
-    check('leaveType', 'Leave Type is required').not().isEmpty(),
+check('numDays', 'Number of days must be a number').isNumeric(),
+check('startDate', 'Start Date is required').not().isEmpty(),
+check('endDate', 'End Date is required').not().isEmpty(),
+check('leaveType', 'Leave Type is required').not().isEmpty(),
 
 ], async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
 
-        return res.json(errors);
+        return res.send(errors);
     }
 
-    const { numDays, startDate, endDate, leaveType } = req.body
+    const { numDays, startDate, endDate, leaveType, dateIssued } = req.body
+
+
+    const LeaveField = {};
+    // making the leave request object
+    LeaveField.employees = req.employees.id;
+    if (numDays) LeaveField.numDays = numDays;
+    if (startDate) LeaveField.startDate = startDate;
+    if (endDate) LeaveField.endDate = endDate;
+    if (leaveType) LeaveField.leaveType = leaveType;
+    if (dateIssued) LeaveField.dateIssued = dateIssued;
+
+
     try {
-        
-        const LeaveField = {};
-    // making the salary object
-    SalaryFields.employees = employees.id;
-    if (hoursWorked) SalaryFields.hoursWorked = hoursWorked;
-    if (hourlyRate) SalaryFields.hourlyRate = hourlyRate;
-    SalaryFields.grossPay = grossPay;
-    SalaryFields.deductions = deductions;
-    SalaryFields.netPay = netPay;
-    SalaryFields.basicSalary = basicSalary;
+
+
+
+        const leave = new LeaveRequestModel(LeaveField)
+
+        await leave.save()
+        res.json({ msg: 'Request Sent'})
 
     } catch (error) {
         console.error(error.message);
         res.send('Server error');
     }
 });
+
+
+
 module.exports = router;
