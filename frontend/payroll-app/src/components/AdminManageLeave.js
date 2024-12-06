@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 
 export const AdminManageLeave = () => {
@@ -73,9 +73,9 @@ export const AdminManageLeave = () => {
                                    
 
 
-                                    <NavLink to={{pathname: '/adminupdateleave'}} state={{ id: request._id, name: request.employees.firstName }}>
+                                    <Link to={`/adminupdateleave/${request._id}/${request.employees.firstName}`}>
                                         <button type="button" class="btn btn-primary">Edit</button>
-                                    </NavLink>
+                                    </Link>
                                 </>
                             ))
                         }
