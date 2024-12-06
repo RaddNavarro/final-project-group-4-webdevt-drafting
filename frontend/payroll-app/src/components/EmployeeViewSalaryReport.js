@@ -86,20 +86,30 @@ export const EmployeeViewSalaryReport = () => {
                             <button type="button" class="btn btn-primary">Request for Leave</button>
                         </NavLink>
 
-                        {
-                            user.length > 0 ? user.map(user => (
-                                <>
-                                    <p>Email: {user.employees.email}</p>
-                                    <p>Name: {user.employees.firstName} {user.employees.lastName}</p>
-                                    <p>Total Hours Worked: {user.hoursWorked} Hours</p>
-                                    <p>Hourly Rate: ₱{user.hourlyRate}</p>
-                                    <p>Basic Salary: ₱{basicSalary}</p>
-                                    <p>Overtime Pay: ₱{overtimePay}</p>
-                                    <p>Gross Pay: ₱{grossPay}</p>
-                                    <p>Deductions: ₱{deductions}</p>
-                                    <p>Net Pay: ₱{netPay}</p>
+                        <div className="wrap">
+    <div >
+    <p className="skibidi"> ACNE CorpㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤSalary Slip</p>
 
+    <p className="skibidi2">Some street 273228</p>
+    <p className="skibidi2">Some City, 21321</p>
+    
+
+       
+            <tbody>
+                        {
+                        
+                        user.length > 0 ? user.map(user => (
+                                
+                            <>
+                            
+<div className="toilet">
+                                <p>Email: {user.employees.email}</p>
+                                <p>Id: {user._id}</p>
+                                <p>Name:{user.employees.firstName} {user.employees.lastName}</p>
+</div>
+                                
                                 </>
+
                             ))
 
 
@@ -108,9 +118,69 @@ export const EmployeeViewSalaryReport = () => {
 
 
                         }
+                        </tbody>
+                        <br></br><br></br><br></br>                 
+ <table className="table1">  
+    <tbody>
+{
+                        
+                        user.length > 0 ? 
+                                
+                            <>
+                            
+                            <tr className="shit">
+       
+                                <p><b>Basic Salary:</b>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ₱{basicSalary}</p>
+                                <p><b>Overtime Pay:</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ₱{overtimePay}</p>
+                                <p><b>Gross pay:</b>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ₱{grossPay}</p>
+                                <p><b>Total Net Pay:</b>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ ㅤㅤㅤ<b>₱{netPay}</b></p>
+                                </tr>
+                            
+                                </>
+
+                            
 
 
+                                :
+                                <h1>No data</h1>
 
+
+                        }   
+                       </tbody>
+                       </table>
+                       <table className="table2">  
+                       <tbody>
+                      
+                        {
+                        
+                        user.length > 0 ? user.map(user => (
+                                
+                            <>
+
+                            
+                                
+                                <p>₱{deductions}ㅤㅤㅤㅤㅤㅤㅤㅤㅤ<b>Deductions</b></p>
+                                <p>ㅤㅤㅤㅤㅤㅤㅤㅤㅤ</p>
+                                <p>ㅤㅤㅤㅤㅤㅤㅤㅤㅤ</p>
+                                <p><b>₱{deductions}</b>ㅤㅤㅤㅤㅤㅤ<b>Total Deductions</b></p>
+                                
+                                
+                                
+                                </>
+
+                            ))
+
+
+                                :
+                                <h1>No data</h1>
+
+
+                        }
+                        
+                        </tbody>
+                        </table>
+</div>
+</div>
 
 
                     </>
