@@ -56,9 +56,9 @@
 
 .table1{
   margin: 0;
-  position: absolute;
+  position: relative;
   top: 40%;
-  left: 15%;
+  left: 16%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
@@ -67,7 +67,7 @@
   margin: 0;
   position: absolute;
   top: 40%;
-  right: -9%;
+  right: -5%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }

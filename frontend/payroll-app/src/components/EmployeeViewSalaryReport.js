@@ -3,11 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useReactToPrint } from 'react-to-print';
+import ReactToPrint from 'react-to-print';
 
 
 export const EmployeeViewSalaryReport = () => {
 
-    const componentRef = useRef();
+    const contentRef = useRef();
 
     const [auth, setAuth] = useState(false);
 
@@ -72,13 +73,15 @@ export const EmployeeViewSalaryReport = () => {
 
     }, [])
 
-    console.log(componentRef.current)
+
     
-    const handlePrint = useReactToPrint({
-        content: () => componentRef.current,
-        documentTitle: 'emp-data',
-        onAfterPrint: () => alert('Print Success')
-    });
+    // const handlePrint = useReactToPrint({
+    //     content: () => componentRef.current,
+    //     documentTitle: 'emp-data',
+    //     onAfterPrint: () => alert('Print Success')
+    // });
+
+    const reactToPrintFn = useReactToPrint({ contentRef, documentTitle: 'emp-data' });
 
     return (
 
@@ -99,10 +102,11 @@ export const EmployeeViewSalaryReport = () => {
                    
              
 {/* <button type="button" class="btn btn-primary" onClick={handlePrint}>Download to PDF</button> */}
-<button type="button" class="btn btn-primary" onClick={handlePrint}>Download to PDF</button>
-<div ref={componentRef}>
+<button type="button" class="btn btn-primary" onClick={reactToPrintFn}>Download to PDF</button>
 
-    <div className="wrap">
+
+
+    <div className="wrap" ref={contentRef}>
     <div>
     <p className="skibidi"> ACNE CorpㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤSalary Slip</p>
 
@@ -195,7 +199,6 @@ export const EmployeeViewSalaryReport = () => {
                         
                         </tbody>
                         </table>
-</div>
 </div>
 </div>
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
