@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e0f7fa;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.loginAdmin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    padding: 25px;
+    background-color: #ffffff;
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #007bff;
+}
+
+form {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+form .form-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+form .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form .form-text {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+a {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+p {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: red;
+}
+
+@media (max-width: 450px) {
+    .loginAdmin {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+
+    form .form-control {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}
