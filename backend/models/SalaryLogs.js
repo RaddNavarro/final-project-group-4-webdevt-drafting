@@ -31,6 +31,10 @@ const SalaryLogsSchema = new mongoose.Schema({
     basicSalary: {
         type: Number,
         default: 0
+    },
+    overtimePay: {
+        type: Number,
+        default: 0
     }
 })
 

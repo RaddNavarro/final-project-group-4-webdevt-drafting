@@ -17,7 +17,6 @@ export const EmployeeViewProfile = () => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/employeeviewprofile')
                 } else {
                     setAuth(false);
                     console.log(res.data)
@@ -70,7 +69,7 @@ export const EmployeeViewProfile = () => {
                         </NavLink>
 
                         <NavLink to='/employeeleaverequest'>
-                            <button type="button" class="btn btn-primary">Leave Request</button>
+                            <button type="button" class="btn btn-primary">Request for Leave</button>
                         </NavLink>
 
                         <button type="button" class="btn btn-danger" onClick={handleLogout}>Log Out</button>

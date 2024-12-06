@@ -26,16 +26,36 @@ export const AdminManageLeave = () => {
             })
             .catch(error => console.log(error))
 
+        getAllLeave()
+
+
+
+    }, [])
+
+
+    const getAllLeave = () => {
         axios.get('http://localhost:3001/api/admins/leave-requests')
             .then(res => {
                 setRequests(res.data);
 
             })
             .catch(error => console.log(error))
+    }
 
+    const handleDelete = (id, name) => {
+        const temp = { id }
+        console.log(temp);
+        if (window.confirm(`Are you sure you want to delete ${name}`)) {
+            axios.defaults.withCredentials = true;
+            axios.delete('http://localhost:3001/api/admins/delete-leave', { data: temp })
+                .then(res => {
+                    alert(res.data.msg)
+                    getAllLeave();
 
-
-    }, [])
+                })
+                .catch(error => console.log(error))
+        }
+    }
 
     return (
         <>
@@ -52,9 +72,6 @@ export const AdminManageLeave = () => {
                         <NavLink to='/adminviewemployee'>
                             <button type="button" class="btn btn-primary">View Employee</button>
                         </NavLink>
-                        <NavLink to='/admingeneratesalaryreport'>
-                            <button type="button" class="btn btn-primary">Generate Salary Report</button>
-                        </NavLink>
                         <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
@@ -62,7 +79,7 @@ export const AdminManageLeave = () => {
 
 
                         {
-                            requests &&
+                            requests.length > 0 ?
                             requests.map(request => (
                                 <>
                                     <p>Name: {request.employees.firstName} {request.employees.lastName} </p>
@@ -70,14 +87,20 @@ export const AdminManageLeave = () => {
                                     <p>Leave Type: {request.leaveType}</p>
                                     <p>Number of Days: {request.numDays} </p>
                                     <p>Status: {request.leaveStatus}</p>
-                                   
 
 
-                                    <Link to={`/adminupdateleave/${request._id}/${request.employees.firstName}`}>
-                                        <button type="button" class="btn btn-primary">Edit</button>
-                                    </Link>
+                                    <div class="sigma">
+                                       
+                                        <Link to={`/adminupdateleave/${request._id}/${request.employees.firstName}`}>
+                                            <button type="button" class="btn btn-primary">Edit</button>
+                                        </Link>
+                                        <button type="button" class="btn btn-danger" onClick={() => handleDelete(request._id, request.employees.firstName)}>Delete</button>
+                                    </div>
+
                                 </>
                             ))
+                            :
+                            <h1>No data</h1>
                         }
 
                     </>
