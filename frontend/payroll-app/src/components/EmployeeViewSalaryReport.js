@@ -18,7 +18,6 @@ export const EmployeeViewSalaryReport = () => {
     var netPay;
 
     // formatting them to add commas in thousands
-
     user.map(user => {
         basicSalary = user.basicSalary;
         basicSalary = basicSalary.toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -36,15 +35,12 @@ export const EmployeeViewSalaryReport = () => {
 
         axios.get('http://localhost:3001/emp')
             .then(res => {
-                // console.log(res.data)
-
                 if (res.data.msg === "Success") {
                     setAuth(true)
                     console.log(res.data)
-                    navigate('/employeeviewsalaryreport')
                 } else {
                     setAuth(false);
-                    // console.log(res.data)
+
 
                 }
 
@@ -59,34 +55,10 @@ export const EmployeeViewSalaryReport = () => {
 
                 })
             .catch(error => console.log(error))
-        // const getSalary = async () => {
-
-        //     basicSalary = await user.basicSalary;
-        //     basicSalary = basicSalary.toLocaleString(undefined, {maximumFractionDigits:2})
-
-        //     netPay = await user.netPay;
-        //     netPay = netPay.toLocaleString(undefined, {maximumFractionDigits:2})
-
-        //     grossPay = await user.grossPay;
-        //     grossPay = grossPay.toLocaleString(undefined, {maximumFractionDigits:2})
-        // }
-
-        // getSalary()
 
 
 
     }, [])
-
-
-    // basicSalary = user.basicSalary;
-    // basicSalary = basicSalary.toLocaleString(undefined, {maximumFractionDigits:2})
-
-    // netPay = user.netPay;
-    // netPay = netPay.toLocaleString(undefined, {maximumFractionDigits:2})
-
-    // grossPay = user.grossPay;
-    // grossPay = grossPay.toLocaleString(undefined, {maximumFractionDigits:2})
-
 
 
     return (

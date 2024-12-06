@@ -35,7 +35,7 @@ function App() {
           <Route path='/employeeleaverequest' element={<EmployeeLeaveRequest />} />
           <Route path='/employeeviewprofile' element={<EmployeeViewProfile/>} />
           <Route path='/admineditprofile/:id' element={<AdminEditProfile/>} />
-          <Route path='/adminupdateleave' element={<AdminUpdateLeave/>} />
+          <Route path='/adminupdateleave/:id/:firstName' element={<AdminUpdateLeave/>} />
           {/* <Route path='/myPayroll' element={<MyPayroll />} />
           <Route path='/MyProfile' element={<MyProfile />} />
           <Route path='/payrollLogs' element={<PayrollLogs />} />

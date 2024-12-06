@@ -12,11 +12,7 @@ export const AdminEditProfile = () => {
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const [msg, setMsg] = useState('');
     const [auth, setAuth] = useState(false);
-    const [email, setEmail] = useState('');
-    const location = useLocation();
-    // const [id, setID] = useState();
     const {id} = useParams();
-    const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
     useEffect(() => {

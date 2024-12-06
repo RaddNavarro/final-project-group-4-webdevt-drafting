@@ -7,12 +7,11 @@ export const AdminGenerateSalaryReport = () => {
 
     const [auth, setAuth] = useState(false);
     const [email, setEmail] = useState('');
-    const [employees, setEmployees] = useState([]);
     const [hoursWorked, setHoursWorked] = useState();
     const [hourlyRate, setHourlyRate] = useState();
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const [msg, setMsg] = useState('');
-    const {id} = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -30,18 +29,20 @@ export const AdminGenerateSalaryReport = () => {
 
             })
             .catch(error => console.log(error))
-        
-            axios.get('http://localhost:3001/api/employees/all')
+
+        axios.get('http://localhost:3001/api/admins/get-salary/'+id)
             .then(res => {
-                console.log(res.data)
-                setEmployees(res.data);
+                setHoursWorked(res.data.hoursWorked);
+                setHourlyRate(res.data.hourlyRate);
+                
 
             })
             .catch(error => console.log(error))
 
 
-    
+
     }, [])
+ 
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -88,15 +89,15 @@ export const AdminGenerateSalaryReport = () => {
                         </NavLink>
 
                         <br /> <br /> <br />
-             
+
                         <form>
                             <div class="mb-3">
                                 <label for="inputFirstName">Enter Hours Worked</label>
-                                <input class="form-control" type="number" placeholder="Hours Worked" aria-label="default input example" onChange={(e) => setHoursWorked(e.target.value)}></input>
+                                <input class="form-control" type="number" placeholder="Hours Worked" aria-label="default input example" value={hoursWorked} onChange={(e) => setHoursWorked(e.target.value)}></input>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Enter Hourly Rate</label>
-                                <input class="form-control" type="number" placeholder="Hourly Rate" aria-label="default input example" onChange={(e) => setHourlyRate(e.target.value)}></input>
+                                <input class="form-control" type="number" placeholder="Hourly Rate" aria-label="default input example" value={hourlyRate} onChange={(e) => setHourlyRate(e.target.value)}></input>
                             </div>
                         </form>
 

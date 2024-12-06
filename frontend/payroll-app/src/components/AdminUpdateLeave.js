@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
 export const AdminUpdateLeave = () => {
@@ -10,11 +10,10 @@ export const AdminUpdateLeave = () => {
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const [msg, setMsg] = useState('');
     const location = useLocation();
-    const [id, setID] = useState();
+    // const [id, setID] = useState();
     const [user, setUser] = useState({});
+    const {id, firstName} = useParams();
 
-
-    const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
 
@@ -26,7 +25,7 @@ export const AdminUpdateLeave = () => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/adminupdateleave')
+
                 } else {
                     setAuth(false);
                     console.log(res.data)
@@ -37,9 +36,6 @@ export const AdminUpdateLeave = () => {
             .catch(error => console.log(error))
 
 
-        setUser(location.state)
-        setID(location.state.id)
-        
 
 
     }, [])
@@ -61,7 +57,7 @@ export const AdminUpdateLeave = () => {
                     console.log(result.data)
                     setBackendErrorMsg('')
                     setMsg('Status Updated!')
-                    navigate('/adminupdateleave')
+
                 }
 
             })
@@ -96,8 +92,8 @@ export const AdminUpdateLeave = () => {
                         <br /> <br /> <br />
 
                         <form>
-                            <label for="inputFirstName">Update status for {user.name}</label>
-
+                            <label for="inputFirstName">Update status for {firstName}</label>
+                            
 
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Update Status</label>
@@ -108,7 +104,7 @@ export const AdminUpdateLeave = () => {
                                 </select>
 
                                 <button type="button" class="btn btn-primary" onClick={handleSubmit}>Update</button>
-
+                                {msg && <p>{msg}</p>}
 
                             </div>
 

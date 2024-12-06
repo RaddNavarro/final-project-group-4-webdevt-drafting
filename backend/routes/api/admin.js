@@ -481,4 +481,22 @@ router.get('/edit/:id', async (req, res) => {
 
 )
 
+router.get('/get-salary/:id', async (req, res) => {
+    
+    try {
+        const salary = await SalaryLogsSchema.findOne({ employees: req.params.id })
+
+        
+        res.json(salary);
+
+    } catch (error) {
+
+        console.error(error.message);
+        res.send('Server Error')
+    }
+
+}
+
+)
+
 module.exports = router;
