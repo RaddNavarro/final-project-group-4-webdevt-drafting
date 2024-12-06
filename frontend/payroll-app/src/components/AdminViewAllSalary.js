@@ -75,9 +75,6 @@ export const AdminViewAllSalary = () => {
                         <NavLink to='/adminviewemployee'>
                             <button type="button" class="btn btn-primary">View Employee</button>
                         </NavLink>
-                        <NavLink to='/admineditprofile'>
-                            <button type="button" class="btn btn-primary">Edit Employee Profile</button>
-                        </NavLink>
                         <NavLink to='/admingeneratesalaryreport'>
                             <button type="button" class="btn btn-primary">Generate Salary Report</button>
                         </NavLink>

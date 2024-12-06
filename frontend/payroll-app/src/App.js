@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes } from 'react-router-dom';
-import { HomeEmployee, HomeAdmin, AdminViewEmployee, AdminEditProfile, AdminAddEmployee, AdminGenerateSalaryReport, AdminViewAllSalary, AdminManageLeave, EmployeeViewSalaryReport, EmployeeViewProfile, EmployeeLeaveRequest, LoginEmployee, MyPayroll, MyProfile, PayrollLogs, ViewEmployee, LoginAdmin, LoginAs, SignUp} from './components';
+import { HomeEmployee, HomeAdmin, AdminViewEmployee, AdminEditProfile, AdminAddEmployee, AdminGenerateSalaryReport, AdminViewAllSalary, AdminManageLeave, EmployeeViewSalaryReport, EmployeeViewProfile, EmployeeLeaveRequest, LoginEmployee, AdminUpdateLeave, MyPayroll, MyProfile, PayrollLogs, ViewEmployee, LoginAdmin, LoginAs, SignUp} from './components';
 import './App.css';
 
 
@@ -34,7 +34,8 @@ function App() {
           <Route path='/employeeviewsalaryreport' element={<EmployeeViewSalaryReport />} />
           <Route path='/employeeleaverequest' element={<EmployeeLeaveRequest />} />
           <Route path='/employeeviewprofile' element={<EmployeeViewProfile/>} />
-          <Route path='/admineditprofile' element={<AdminEditProfile/>} />
+          <Route path='/admineditprofile/:id' element={<AdminEditProfile/>} />
+          <Route path='/adminupdateleave' element={<AdminUpdateLeave/>} />
           {/* <Route path='/myPayroll' element={<MyPayroll />} />
           <Route path='/MyProfile' element={<MyProfile />} />
           <Route path='/payrollLogs' element={<PayrollLogs />} />

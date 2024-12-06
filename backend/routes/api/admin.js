@@ -10,6 +10,7 @@ const Admins = require('../../models/Admins');
 const Employees = require('../../models/Employees');
 const SalaryLogsSchema = require('../../models/SalaryLogs');
 const LeaveRequestModel = require('../../models/LeaveRequests');
+const EmployeeModel = require('../../models/Employees');
 
 
 // @route   GET api/admins
@@ -152,7 +153,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
 
             deductions = parseFloat((deductions * multiplicator).toFixed(11));
             deductions = (Math.round(deductions) / multiplicator).toFixed(2);
-  
+
             grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
             grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
 
@@ -161,7 +162,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
             netPay = grossPay - deductions;
             netPay = parseFloat((netPay * multiplicator).toFixed(11));
             netPay = (Math.round(netPay) / multiplicator).toFixed(2);
-            
+
 
         } else {
             grossPay = hoursWorked * hourlyRate;
@@ -203,7 +204,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
 
             // // deductions = parseFloat((deductions * multiplicator).toFixed(11));
             // // deductions = (Math.round(deductions) / multiplicator).toFixed(2);
-        
+
             grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
             grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
 
@@ -256,11 +257,11 @@ check('hourlyRate', 'Numbers only').isNumeric(),
             deductions = deductions + (grossPay * 0.01);
         }
 
-            deductions = parseFloat((deductions * multiplicator).toFixed(11));
-            deductions = (Math.round(deductions) / multiplicator).toFixed(2);
-        
-            grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
-            grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
+        deductions = parseFloat((deductions * multiplicator).toFixed(11));
+        deductions = (Math.round(deductions) / multiplicator).toFixed(2);
+
+        grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
+        grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
 
         // compute for netPay
         netPay = grossPay - deductions;
@@ -330,14 +331,14 @@ router.get('/salary', async (req, res) => {
 
 
 router.delete('/delete', async (req, res) => {
-    
+
     try {
-        
-        
+
+
         // rEMOVE employee
         await Employees.findOneAndDelete({ _id: req.body.id });
         // remove their salary log
-        await SalaryLogs.findOneAndDelete({ employees: req.body.id});
+        await SalaryLogs.findOneAndDelete({ employees: req.body.id });
 
         res.json({ msg: 'Employee deleted' });
 
@@ -361,5 +362,123 @@ router.get('/leave-requests', async (req, res) => {
     }
 
 })
+
+router.post('/leave-requests/edit', [check('leaveStatus', 'Status Required').not().isEmpty()], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.json({ errors: errors.array() });
+
+    }
+
+    const leaves = await LeaveRequestModel.findOne({ _id: req.body.id });
+
+    if (!leaves) {
+        return res.json({ msg: 'There is no leave request yet' })
+    }
+
+    const { leaveStatus } = req.body;
+
+    const LeaveField = {};
+    // making the leave request object
+    LeaveField.numDays = leaves.numDays;
+    LeaveField.startDate = leaves.startDate;
+    LeaveField.endDate = leaves.endDate;
+    LeaveField.leaveType = leaves.leaveType;
+    LeaveField.dateIssued = leaves.dateIssued;
+    if (leaveStatus) LeaveField.leaveStatus = leaveStatus
+
+    try {
+        // get fields from employees
+        let leave = await LeaveRequestModel.findOne({ _id: req.body.id }).populate('employees', ['firstName', 'lastName']);
+
+
+
+
+        if (leave) {
+            leave = await LeaveRequestModel.findOneAndUpdate(
+                { _id: leave.id },
+                { $set: LeaveField },
+                { new: true }
+            );
+
+            return res.json(leave);
+        }
+        await leave.save();
+        res.json(leave);
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
+    }
+
+})
+
+router.post('/edit-employee', async (req, res) => {
+
+    const employees = await EmployeeModel.findOne({ _id: req.body.id })
+
+    const {
+        firstName,
+        lastName,
+        contactNum,
+        address
+    } = req.body;
+
+    const employeeFields = {};
+    // making the employee object
+    employeeFields.email = employees.email;
+    employeeFields.password = employees.password;
+    employeeFields.firstName = firstName;
+    employeeFields.lastName = lastName;
+    employeeFields.contactNum = contactNum;
+    employeeFields.address = address;
+
+    try {
+        let employee = await Employees.findOne({ _id: req.body.id })
+
+        if (employee) {
+            // updating the employee
+            employee = await Employees.findOneAndUpdate(
+                { _id: employee.id },
+                { $set: employeeFields },
+                { new: true }
+            );
+
+            return res.json(employee);
+        }
+
+        // creating the employee
+        employee = new Employees(employeeFields);
+
+        await employee.save();
+        res.json(employee);
+    } catch (error) {
+        res.json(employeeFields)
+        console.error(error.message);
+        res.send('Server Error')
+    }
+
+}
+
+)
+
+router.get('/edit/:id', async (req, res) => {
+    
+    try {
+        const employee = await Employees.findById(req.params.id)
+
+        
+        res.json(employee);
+
+    } catch (error) {
+
+        console.error(error.message);
+        res.send('Server Error')
+    }
+
+}
+
+)
 
 module.exports = router;

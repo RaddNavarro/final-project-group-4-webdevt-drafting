@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 
 
@@ -8,6 +8,7 @@ export const AdminViewEmployee = () => {
 
     const [auth, setAuth] = useState(false);
     const [users, setUsers] = useState([]);
+    // const [msg, setMsg] = useState('');
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
@@ -82,9 +83,6 @@ export const AdminViewEmployee = () => {
                         <NavLink to='/adminaddemployee'>
                             <button type="button" class="btn btn-primary">Add Employee</button>
                         </NavLink>
-                        <NavLink to='/admineditprofile'>
-                            <button type="button" class="btn btn-primary">Edit Employee Profile</button>
-                        </NavLink>
                         <NavLink to='/admingeneratesalaryreport'>
                             <button type="button" class="btn btn-primary">Generate Salary Report</button>
                         </NavLink>
@@ -94,24 +92,59 @@ export const AdminViewEmployee = () => {
                         <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
-                        <br /> <br /> <br />
+                       
 
+                        <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
+                            <div className="w-50">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            First Name
+                                        </th>
+                                        <th>
+                                            Last Name
+                                        </th>
+                                        <th>
+                                            Contact Number
+                                        </th>
+                                        <th>
+                                            Address
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {
 
-                        {
-                            users &&
-                            users.map(users => (
-                                <>
-                                <p>Email: {users.email} </p>
-                            <p>First Name: {users.firstName} </p>
-                            <p>Last Name: {users.lastName} </p>
-                            <p>Contact: {users.contactNum} </p>
-                            <p>Address: {users.address} </p>
+users &&
+users.map(users => (
+    <>
+<tr>
+<td>{users.firstName} </td>
+<td>{users.lastName} </td>
+<td>{users.contactNum} </td>
+<td>{users.address} </td>
 
-                            
-                            <button type="button" class="btn btn-danger" onClick={ () => handleDelete(users._id, users.firstName)}>Delete</button>
-                            </>
-                            ))
-                        } 
+<div class="sigma">
+<button type="button" class="btn btn-danger"  onClick={ () => handleDelete(users._id, users.firstName)}>Delete</button>
+<Link to={`/admineditprofile/${users._id}`}>
+<button type="button" class="btn btn-primary">Edit</button>
+</Link>
+</div>
+</tr>
+
+</>
+))
+} 
+
+                                </tbody>
+                            </table>
+                                </div>
+                                </div>
+
 
                     </>
 

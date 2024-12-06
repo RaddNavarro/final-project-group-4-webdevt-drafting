@@ -26,7 +26,7 @@ export const AdminManageLeave = () => {
             })
             .catch(error => console.log(error))
 
-            axios.get('http://localhost:3001/api/admins/leave-requests')
+        axios.get('http://localhost:3001/api/admins/leave-requests')
             .then(res => {
                 setRequests(res.data);
 
@@ -52,9 +52,6 @@ export const AdminManageLeave = () => {
                         <NavLink to='/adminviewemployee'>
                             <button type="button" class="btn btn-primary">View Employee</button>
                         </NavLink>
-                        <NavLink to='/admineditprofile'>
-                            <button type="button" class="btn btn-primary">Edit Employee Profile</button>
-                        </NavLink>
                         <NavLink to='/admingeneratesalaryreport'>
                             <button type="button" class="btn btn-primary">Generate Salary Report</button>
                         </NavLink>
@@ -68,17 +65,20 @@ export const AdminManageLeave = () => {
                             requests &&
                             requests.map(request => (
                                 <>
-                                <p>Name: {request.employees.firstName} {request.employees.lastName} </p>
-                            <p>Date Issued: {request.dateIssued}</p>
-                            <p>Leave Type: {request.leaveType}</p>
-                            <p>Number of Days: {request.numDays} </p>
-                            
+                                    <p>Name: {request.employees.firstName} {request.employees.lastName} </p>
+                                    <p>Date Issued: {request.dateIssued}</p>
+                                    <p>Leave Type: {request.leaveType}</p>
+                                    <p>Number of Days: {request.numDays} </p>
+                                    <p>Status: {request.leaveStatus}</p>
+                                   
 
-                            
-                           
-                            </>
+
+                                    <NavLink to={{pathname: '/adminupdateleave'}} state={{ id: request._id, name: request.employees.firstName }}>
+                                        <button type="button" class="btn btn-primary">Edit</button>
+                                    </NavLink>
+                                </>
                             ))
-                        } 
+                        }
 
                     </>
                     :
@@ -88,7 +88,7 @@ export const AdminManageLeave = () => {
                             <button type="button" class="btn btn-primary">Login</button>
                         </NavLink>
                     </>
-        }
+            }
 
         </>
     );

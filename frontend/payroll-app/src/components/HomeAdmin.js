@@ -51,9 +51,7 @@ export const HomeAdmin = () => {
                             <button type="button" class="btn btn-primary">Add Employees</button>
                         </NavLink>
                         <NavLink to='/adminviewemployee'>
-                            <NavLink to='/admineditprofile'>
-                                <button type="button" class="btn btn-primary">Edit Employee Profile</button>
-                            </NavLink>
+
                             <button type="button" class="btn btn-primary">View Employee</button>
                         </NavLink>
                         <NavLink to='/admingeneratesalaryreport'>

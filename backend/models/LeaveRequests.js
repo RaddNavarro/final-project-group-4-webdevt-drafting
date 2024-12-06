@@ -25,7 +25,7 @@ const LeaveRequestsSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    status: {
+    leaveStatus: {
         type: String,
         default: "Pending"
     }
