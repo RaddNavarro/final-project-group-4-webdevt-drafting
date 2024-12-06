@@ -2,16 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from 'axios';
-
+import { useReactToPrint } from 'react-to-print';
 
 
 export const EmployeeViewSalaryReport = () => {
+
+    const componentRef = useRef();
 
     const [auth, setAuth] = useState(false);
 
     const [backendErrorMsg, setBackendErrorMsg] = useState('');
     const navigate = useNavigate();
     const [user, setUser] = useState([]);
+
+ 
 
     var grossPay;
     var basicSalary;
@@ -63,11 +67,18 @@ export const EmployeeViewSalaryReport = () => {
 
                 })
             .catch(error => console.log(error))
-
+     
 
 
     }, [])
 
+    console.log(componentRef.current)
+    
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'emp-data',
+        onAfterPrint: () => alert('Print Success')
+    });
 
     return (
 
@@ -75,7 +86,7 @@ export const EmployeeViewSalaryReport = () => {
             {
                 auth ?
                     <>
-                        <h1>View Salary Report</h1>
+                        <h1 >View Salary Report</h1>
                         <NavLink to='/homeEmployee'>
                             <button type="button" class="btn btn-primary">Home</button>
                         </NavLink>
@@ -85,9 +96,14 @@ export const EmployeeViewSalaryReport = () => {
                         <NavLink to='/employeeleaverequest'>
                             <button type="button" class="btn btn-primary">Request for Leave</button>
                         </NavLink>
+                   
+             
+{/* <button type="button" class="btn btn-primary" onClick={handlePrint}>Download to PDF</button> */}
+<button type="button" class="btn btn-primary" onClick={handlePrint}>Download to PDF</button>
+<div ref={componentRef}>
 
-                        <div className="wrap">
-    <div >
+    <div className="wrap">
+    <div>
     <p className="skibidi"> ACNE CorpㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤSalary Slip</p>
 
     <p className="skibidi2">Some street 273228</p>
@@ -95,7 +111,7 @@ export const EmployeeViewSalaryReport = () => {
     
 
        
-            <tbody>
+            <tbody >
                         {
                         
                         user.length > 0 ? user.map(user => (
@@ -153,7 +169,7 @@ export const EmployeeViewSalaryReport = () => {
                       
                         {
                         
-                        user.length > 0 ? user.map(user => (
+                        user.length > 0 ? 
                                 
                             <>
 
@@ -168,7 +184,7 @@ export const EmployeeViewSalaryReport = () => {
                                 
                                 </>
 
-                            ))
+
 
 
                                 :
@@ -181,7 +197,8 @@ export const EmployeeViewSalaryReport = () => {
                         </table>
 </div>
 </div>
-
+</div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
                     </>
                     :

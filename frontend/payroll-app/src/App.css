@@ -56,18 +56,18 @@
 
 .table1{
   margin: 0;
-  position: relative;
+  position: absolute;
   top: 40%;
-  left: 16%;
+  left: 15%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 
 .table2{
   margin: 0;
-  position: relative;
+  position: absolute;
   top: 40%;
-  right: -90%;
+  right: -9%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
