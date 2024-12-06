@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
 export const AdminGenerateSalaryReport = () => {
@@ -12,6 +12,7 @@ export const AdminGenerateSalaryReport = () => {
     const [hourlyRate, setHourlyRate] = useState();
     const [backendErrorMsg, setBackendErrorMsg] = useState([]);
     const [msg, setMsg] = useState('');
+    const {id} = useParams();
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -21,7 +22,6 @@ export const AdminGenerateSalaryReport = () => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/admingeneratesalaryreport')
                 } else {
                     setAuth(false);
                     console.log(res.data)
@@ -40,13 +40,13 @@ export const AdminGenerateSalaryReport = () => {
             .catch(error => console.log(error))
 
 
-
+    
     }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/api/admins/generate', { email, hoursWorked, hourlyRate })
+        axios.post('http://localhost:3001/api/admins/generate', { id, hoursWorked, hourlyRate })
             .then(result => {
                 if (result.data.errors) {
                     setBackendErrorMsg('');
@@ -88,13 +88,7 @@ export const AdminGenerateSalaryReport = () => {
                         </NavLink>
 
                         <br /> <br /> <br />
-                        <label for="inputFirstName">Select Employee to edit</label>
-                            <select class="form-select" aria-label="Default select example" value={email} onChange={(e) => setEmail(e.target.value)}>
-                                <option>Select Employee email...</option>
-                                {
-                                    employees.map(emp => <option>{emp.email}</option>)
-                                }
-                            </select>   
+             
                         <form>
                             <div class="mb-3">
                                 <label for="inputFirstName">Enter Hours Worked</label>

@@ -30,7 +30,7 @@ export const AdminViewEmployee = () => {
             })
             .catch(error => console.log(error))
 
-            getAllEmployee();
+        getAllEmployee();
         // axios.get('http://localhost:3001/api/employees/all')
         //     .then(res => {
         //         setUsers(res.data)
@@ -56,18 +56,18 @@ export const AdminViewEmployee = () => {
     }
 
     const handleDelete = (id, name) => {
-        const temp = {id}
+        const temp = { id }
         console.log(temp);
         if (window.confirm(`Are you sure you want to delete ${name}`)) {
             axios.defaults.withCredentials = true;
-            axios.delete('http://localhost:3001/api/admins/delete', {data: temp})
-            .then(res => {
-                alert(res.data.msg)
-                getAllEmployee();
+            axios.delete('http://localhost:3001/api/admins/delete', { data: temp })
+                .then(res => {
+                    alert(res.data.msg)
+                    getAllEmployee();
 
-            })
-            .catch(error => console.log(error))
-        } 
+                })
+                .catch(error => console.log(error))
+        }
     }
 
     return (
@@ -83,72 +83,72 @@ export const AdminViewEmployee = () => {
                         <NavLink to='/adminaddemployee'>
                             <button type="button" class="btn btn-primary">Add Employee</button>
                         </NavLink>
-                        <NavLink to='/admingeneratesalaryreport'>
-                            <button type="button" class="btn btn-primary">Generate Salary Report</button>
-                        </NavLink>
                         <NavLink to='/adminmanageleave'>
                             <button type="button" class="btn btn-primary">Manage Leave request</button>
                         </NavLink>
                         <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
-                       
+
 
                         <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
                             <div className="w-50">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            First Name
-                                        </th>
-                                        <th>
-                                            Last Name
-                                        </th>
-                                        <th>
-                                            Contact Number
-                                        </th>
-                                        <th>
-                                            Address
-                                        </th>
-                                        <th>
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                First Name
+                                            </th>
+                                            <th>
+                                                Last Name
+                                            </th>
+                                            <th>
+                                                Contact Number
+                                            </th>
+                                            <th>
+                                                Address
+                                            </th>
+                                            <th>
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
 
-users &&
-users.map(users => (
-    <>
-<tr>
-<td>{users.firstName} </td>
-<td>{users.lastName} </td>
-<td>{users.contactNum} </td>
-<td>{users.address} </td>
+                                            users &&
+                                            users.map(users => (
+                                                <>
+                                                    <tr>
+                                                        <td>{users.firstName} </td>
+                                                        <td>{users.lastName} </td>
+                                                        <td>{users.contactNum} </td>
+                                                        <td>{users.address} </td>
 
-<div class="sigma">
-<button type="button" class="btn btn-danger"  onClick={ () => handleDelete(users._id, users.firstName)}>Delete</button>
-<Link to={`/admineditprofile/${users._id}`}>
-<button type="button" class="btn btn-primary">Edit</button>
-</Link>
-</div>
-</tr>
+                                                        <div class="sigma">
+                                                            <button type="button" class="btn btn-danger" onClick={() => handleDelete(users._id, users.firstName)}>Delete</button>
+                                                            <Link to={`/admineditprofile/${users._id}`}>
+                                                                <button type="button" class="btn btn-primary">Edit</button>
+                                                            </Link>
+                                                            <Link to={`/admingeneratesalaryreport/${users._id}`}>
+                                                                <button type="button" class="btn btn-primary">Generate Salary Report</button>
+                                                            </Link>
+                                                        </div>
+                                                    </tr>
 
-</>
-))
-} 
+                                                </>
+                                            ))
+                                        }
 
-                                </tbody>
-                            </table>
-                                </div>
-                                </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
 
                     </>
 
-                    
+
                     :
                     <>
                         <h2>Please Log in first</h2>

@@ -16,7 +16,7 @@ export const AdminManageLeave = () => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/adminmanageleave')
+
                 } else {
                     setAuth(false);
                     console.log(res.data)

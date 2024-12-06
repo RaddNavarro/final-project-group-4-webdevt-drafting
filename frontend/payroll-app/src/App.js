@@ -28,7 +28,7 @@ function App() {
           <Route path='/homeAdmin' element={<HomeAdmin />} />
           <Route path='/adminviewemployee' element={<AdminViewEmployee />} />
           <Route path='/adminaddemployee' element={<AdminAddEmployee />} />
-          <Route path='/admingeneratesalaryreport' element={<AdminGenerateSalaryReport/>} />
+          <Route path='/admingeneratesalaryreport/:id' element={<AdminGenerateSalaryReport/>} />
           <Route path='/adminviewallsalary' element={<AdminViewAllSalary/>} />
           <Route path='/adminmanageleave' element={<AdminManageLeave/>} />
           <Route path='/employeeviewsalaryreport' element={<EmployeeViewSalaryReport />} />

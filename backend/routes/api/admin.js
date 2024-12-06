@@ -79,7 +79,7 @@ router.post('/', [
 }
 );
 
-router.post('/generate', [check('email', 'Email is required').not().isEmpty(),
+router.post('/generate', [
 check('hoursWorked', 'Total Hours Worked is required').not().isEmpty(),
 check('hoursWorked', 'Numbers only').isNumeric(),
 check('hourlyRate', 'Hourly Rate is required').not().isEmpty(),
@@ -272,7 +272,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
 
 
     // finding the employee in the employees table
-    let employees = await Employees.findOne({ email: req.body.email });
+    const employees = await Employees.findOne({ _id: req.body.id });
 
 
 
