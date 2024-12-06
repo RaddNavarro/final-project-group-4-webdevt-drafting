@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
-// get admin db
+// get dbs
 const Admins = require('../../models/Admins');
 const Employees = require('../../models/Employees');
 const SalaryLogsSchema = require('../../models/SalaryLogs');
@@ -98,14 +98,13 @@ check('hourlyRate', 'Numbers only').isNumeric(),
         grossPay,
         deductions,
         netPay,
-        basicSalary
+        basicSalary,
+        overtimePay
     } = req.body;
 
-    const maxHours = 171.2;
+    const maxHours = 171;
     const minHours = 160;
-    let overtimePay = 0;
     let overtimeHours = 0;
-    let tempGrossPay = 0;
     var multiplicator = Math.pow(10, 2);
 
     //check for overtime
@@ -151,8 +150,6 @@ check('hourlyRate', 'Numbers only').isNumeric(),
                 deductions = deductions + (grossPay * 0.01);
             }
 
-            deductions = parseFloat((deductions * multiplicator).toFixed(11));
-            deductions = (Math.round(deductions) / multiplicator).toFixed(2);
 
             grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
             grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
@@ -163,7 +160,10 @@ check('hourlyRate', 'Numbers only').isNumeric(),
             netPay = parseFloat((netPay * multiplicator).toFixed(11));
             netPay = (Math.round(netPay) / multiplicator).toFixed(2);
 
+            deductions = parseFloat((deductions * multiplicator).toFixed(11));
+            deductions = (Math.round(deductions) / multiplicator).toFixed(2);
 
+            overtimePay = 0;
         } else {
             grossPay = hoursWorked * hourlyRate;
             let annGrossPay = 0;
@@ -202,8 +202,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
                 deductions = deductions + (grossPay * 0.01);
             }
 
-            // // deductions = parseFloat((deductions * multiplicator).toFixed(11));
-            // // deductions = (Math.round(deductions) / multiplicator).toFixed(2);
+
 
             grossPay = parseFloat((grossPay * multiplicator).toFixed(11));
             grossPay = (Math.round(grossPay) / multiplicator).toFixed(2);
@@ -213,13 +212,17 @@ check('hourlyRate', 'Numbers only').isNumeric(),
             netPay = parseFloat((netPay * multiplicator).toFixed(11));
             netPay = (Math.round(netPay) / multiplicator).toFixed(2);
 
+            deductions = parseFloat((deductions * multiplicator).toFixed(11));
+            deductions = (Math.round(deductions) / multiplicator).toFixed(2);
+
+            overtimePay = 0;
         }
     } else {
         // including overtime
         overtimeHours = hoursWorked - maxHours;
 
         grossPay = maxHours * hourlyRate;
-        overtimePay = overtimeHours * (hourlyRate * 1.25);
+        overtimePay = overtimeHours * hourlyRate * 1.25;
         grossPay = grossPay + overtimePay;
         let annGrossPay = 0;
 
@@ -268,6 +271,10 @@ check('hourlyRate', 'Numbers only').isNumeric(),
         netPay = parseFloat((netPay * multiplicator).toFixed(11));
         netPay = (Math.round(netPay) / multiplicator).toFixed(2);
 
+       
+        overtimePay = parseFloat((overtimePay * multiplicator).toFixed(11));
+        overtimePay = (Math.round(overtimePay) / multiplicator).toFixed(2);
+
     }
 
 
@@ -286,6 +293,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
     SalaryFields.deductions = deductions;
     SalaryFields.netPay = netPay;
     SalaryFields.basicSalary = basicSalary;
+    SalaryFields.overtimePay = overtimePay;
 
     try {
         let salary = await SalaryLogsSchema.findOne({ employees: employees.id });
@@ -317,7 +325,7 @@ check('hourlyRate', 'Numbers only').isNumeric(),
 
 router.get('/salary', async (req, res) => {
     try {
-        // get fields from employees
+        // get fields from salary logs
         const salary = await SalaryLogsSchema.find().populate('employees', ['email', 'firstName', 'lastName']);
 
 
@@ -348,10 +356,42 @@ router.delete('/delete', async (req, res) => {
     }
 });
 
+router.delete('/delete-leave', async (req, res) => {
+
+    try {
+
+
+        // rEMOVE the leave request
+        await LeaveRequestModel.findOneAndDelete({ _id: req.body.id });
+
+
+        res.json({ msg: 'Request deleted' });
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
+    }
+});
+
+router.delete('/delete-salary', async (req, res) => {
+
+    try {
+
+        // rEMOVE the salary report
+        await SalaryLogsSchema.findOneAndDelete({ _id: req.body.id });
+
+        res.json({ msg: 'Request deleted' });
+
+    } catch (error) {
+        console.error(error.message);
+        res.send('Server error');
+    }
+});
+
 router.get('/leave-requests', async (req, res) => {
 
     try {
-        // get fields from employees
+        // get fields from leave request
         const leave = await LeaveRequestModel.find().populate('employees', ['firstName', 'lastName']);
 
         res.json(leave);
@@ -389,7 +429,7 @@ router.post('/leave-requests/edit', [check('leaveStatus', 'Status Required').not
     if (leaveStatus) LeaveField.leaveStatus = leaveStatus
 
     try {
-        // get fields from employees
+
         let leave = await LeaveRequestModel.findOne({ _id: req.body.id }).populate('employees', ['firstName', 'lastName']);
 
 

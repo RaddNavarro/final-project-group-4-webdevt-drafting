@@ -20,7 +20,6 @@ export const AdminViewEmployee = () => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/adminviewemployee')
                 } else {
                     setAuth(false);
                     console.log(res.data)
@@ -31,15 +30,6 @@ export const AdminViewEmployee = () => {
             .catch(error => console.log(error))
 
         getAllEmployee();
-        // axios.get('http://localhost:3001/api/employees/all')
-        //     .then(res => {
-        //         setUsers(res.data)
-        //         console.log(res.data)
-
-
-        //     })
-        //     .catch(error => console.log(error))
-
 
     }, [])
 
@@ -116,7 +106,7 @@ export const AdminViewEmployee = () => {
                                     <tbody>
                                         {
 
-                                            users &&
+                                            users.length > 0 ?
                                             users.map(users => (
                                                 <>
                                                     <tr>
@@ -126,18 +116,20 @@ export const AdminViewEmployee = () => {
                                                         <td>{users.address} </td>
 
                                                         <div class="sigma">
-                                                            <button type="button" class="btn btn-danger" onClick={() => handleDelete(users._id, users.firstName)}>Delete</button>
                                                             <Link to={`/admineditprofile/${users._id}`}>
                                                                 <button type="button" class="btn btn-primary">Edit</button>
                                                             </Link>
                                                             <Link to={`/admingeneratesalaryreport/${users._id}`}>
                                                                 <button type="button" class="btn btn-primary">Generate Salary Report</button>
                                                             </Link>
+                                                            <button type="button" class="btn btn-danger" onClick={() => handleDelete(users._id, users.firstName)}>Delete</button>
                                                         </div>
                                                     </tr>
 
                                                 </>
                                             ))
+                                            :
+                                            <h1>No data</h1>
                                         }
 
                                     </tbody>

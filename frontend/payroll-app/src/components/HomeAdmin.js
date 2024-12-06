@@ -54,9 +54,6 @@ export const HomeAdmin = () => {
 
                             <button type="button" class="btn btn-primary">View Employee</button>
                         </NavLink>
-                        <NavLink to='/admingeneratesalaryreport'>
-                            <button type="button" class="btn btn-primary">Generate Salary Report</button>
-                        </NavLink>
                         <NavLink to='/adminmanageleave'>
                             <button type="button" class="btn btn-primary">Manage Leave request</button>
                         </NavLink>

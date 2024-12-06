@@ -16,6 +16,8 @@ export const EmployeeViewSalaryReport = () => {
     var grossPay;
     var basicSalary;
     var netPay;
+    var deductions;
+    var overtimePay;
 
     // formatting them to add commas in thousands
     user.map(user => {
@@ -27,6 +29,12 @@ export const EmployeeViewSalaryReport = () => {
 
         grossPay = user.grossPay;
         grossPay = grossPay.toLocaleString(undefined, { maximumFractionDigits: 2 })
+
+        deductions = user.deductions;
+        deductions = deductions.toLocaleString(undefined, { maximumFractionDigits: 2 })
+
+        overtimePay = user.overtimePay;
+        overtimePay = overtimePay.toLocaleString(undefined, { maximumFractionDigits: 2 })
     })
 
 
@@ -75,7 +83,7 @@ export const EmployeeViewSalaryReport = () => {
                             <button type="button" class="btn btn-primary">View Profile</button>
                         </NavLink>
                         <NavLink to='/employeeleaverequest'>
-                            <button type="button" class="btn btn-primary">Leave Request</button>
+                            <button type="button" class="btn btn-primary">Request for Leave</button>
                         </NavLink>
 
                         {
@@ -86,7 +94,9 @@ export const EmployeeViewSalaryReport = () => {
                                     <p>Total Hours Worked: {user.hoursWorked} Hours</p>
                                     <p>Hourly Rate: ₱{user.hourlyRate}</p>
                                     <p>Basic Salary: ₱{basicSalary}</p>
+                                    <p>Overtime Pay: ₱{overtimePay}</p>
                                     <p>Gross Pay: ₱{grossPay}</p>
+                                    <p>Deductions: ₱{deductions}</p>
                                     <p>Net Pay: ₱{netPay}</p>
 
                                 </>

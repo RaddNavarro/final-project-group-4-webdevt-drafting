@@ -44,7 +44,7 @@ export const HomeEmployee = () => {
                             <button type="button" class="btn btn-primary">View Profile</button>
                         </NavLink>
                         <NavLink to='/employeeleaverequest'>
-                            <button type="button" class="btn btn-primary">Leave Request</button>
+                            <button type="button" class="btn btn-primary">Request for Leave</button>
                         </NavLink>
                         
                     </>

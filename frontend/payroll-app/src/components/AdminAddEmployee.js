@@ -25,7 +25,6 @@ export const AdminAddEmployee = () => {
                 console.log(res.data)
                 if (res.data.msg === "Success") {
                     setAuth(true)
-                    navigate('/adminaddemployee')
                 } else {
                     setAuth(false);
                     console.log(res.data)
@@ -71,9 +70,6 @@ export const AdminAddEmployee = () => {
                         </NavLink>
                         <NavLink to='/adminviewemployee'>
                             <button type="button" class="btn btn-primary">View Employees</button>
-                        </NavLink>
-                        <NavLink to='/admingeneratesalaryreport'>
-                            <button type="button" class="btn btn-primary">Generate Salary Report</button>
                         </NavLink>
                         <NavLink to='/adminmanageleave'>
                             <button type="button" class="btn btn-primary">Manage Leave request</button>
