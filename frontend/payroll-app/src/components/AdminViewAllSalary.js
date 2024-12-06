@@ -9,32 +9,7 @@ export const AdminViewAllSalary = () => {
     const [auth, setAuth] = useState(false);
     const [salary, setSalary] = useState([]);
     const navigate = useNavigate();
-    var grossPay;
-    var basicSalary;
-    var netPay;
-    var deductions;
-    var overtimePay;
 
-    salary.map(salary => {
-
-        // formatting them to add commas in thousands
-        grossPay = salary.grossPay;
-        grossPay = grossPay.toLocaleString(undefined, { maximumFractionDigits: 2 })
-
-        basicSalary = salary.basicSalary;
-        basicSalary = basicSalary.toLocaleString(undefined, { maximumFractionDigits: 2 })
-
-        netPay = salary.netPay;
-        netPay = netPay.toLocaleString(undefined, { maximumFractionDigits: 2 })
-
-        deductions = salary.deductions;
-        deductions = deductions.toLocaleString(undefined, { maximumFractionDigits: 2 })
-
-        overtimePay = salary.overtimePay;
-        overtimePay = overtimePay.toLocaleString(undefined, { maximumFractionDigits: 2 })
-
-
-    })
 
 
     axios.defaults.withCredentials = true;
@@ -148,6 +123,7 @@ export const AdminViewAllSalary = () => {
                         {
                         
                             salary.length > 0 ? salary.map(salary => (
+                           
                                 
                                 <>
                                 
@@ -155,12 +131,12 @@ export const AdminViewAllSalary = () => {
                                     <td>{salary.employees.email}</td>
                                     <td>{salary.employees.firstName} {salary.employees.lastName}</td>
                                     <td>{salary.hoursWorked}</td>
-                                    <td>{salary.hourlyRate}₱</td>
-                                    <td>{basicSalary}₱</td>
-                                    <td>{overtimePay}₱</td>
-                                    <td>{grossPay}₱</td>
-                                    <td>{deductions}₱</td>
-                                    <td>{netPay}₱</td>
+                                    <td>{salary.hourlyRate}</td>
+                                    <td>₱{salary.basicSalary.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                                    <td>₱{salary.overtimePay.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                                    <td>₱{salary.grossPay.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                                    <td>₱{salary.deductions.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                                    <td>₱{salary.netPay.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
 
                                     <div class="sigma">
                                         <button type="button" class="btn btn-danger" onClick={() => handleDelete(salary._id, salary.employees.firstName)}>Delete</button>
