@@ -25,13 +25,13 @@ const LeaveRequestsSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    status: {
+    leaveStatus: {
         type: String,
         default: "Pending"
     }
 })
     
 
-const LeaveRequestModel = mongoose.model("attendance", LeaveRequestsSchema);
+const LeaveRequestModel = mongoose.model("leave-requests", LeaveRequestsSchema);
 
 module.exports = LeaveRequestModel;

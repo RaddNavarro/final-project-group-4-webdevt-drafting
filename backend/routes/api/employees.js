@@ -9,6 +9,7 @@ const { check, validationResult } = require('express-validator');
 // get employee db
 const Employees = require('../../models/Employees');
 const SalaryLogs = require('../../models/SalaryLogs');
+const LeaveRequestModel = require('../../models/LeaveRequests');
 
 
 // @route   GET api/employees
@@ -86,63 +87,63 @@ router.post('/', [
 }
 );
 
-router.post('/edit', [check('email', 'Email is required').not().isEmpty(),
-check('firstName', 'First Name is required').not().isEmpty(),
-check('lastName', 'Last name is required').not().isEmpty(),
-check('contactNum', 'Contact is required').not().isEmpty(),
-check('address', 'Address is required').not().isEmpty()
-]
-    , async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.json({ errors: errors.array() });
+// router.post('/edit', [check('email', 'Email is required').not().isEmpty(),
+// check('firstName', 'First Name is required').not().isEmpty(),
+// check('lastName', 'Last name is required').not().isEmpty(),
+// check('contactNum', 'Contact is required').not().isEmpty(),
+// check('address', 'Address is required').not().isEmpty()
+// ]
+//     , async (req, res) => {
+//         const errors = validationResult(req);
+//         if (!errors.isEmpty()) {
+//             return res.json({ errors: errors.array() });
 
-        }
+//         }
 
-        const {
-            firstName,
-            lastName,
-            contactNum,
-            address
-        } = req.body;
+//         const {
+//             firstName,
+//             lastName,
+//             contactNum,
+//             address
+//         } = req.body;
 
-        const employeeFields = {};
-        // making the employee object
-        employeeFields.email = req.body.email;
-        employeeFields.password = req.body.password;
-        if (firstName) employeeFields.firstName = firstName;
-        if (lastName) employeeFields.lastName = lastName;
-        if (contactNum) employeeFields.contactNum = contactNum;
-        if (address) employeeFields.address = address;
+//         const employeeFields = {};
+//         // making the employee object
+//         employeeFields.email = req.body.email;
+//         employeeFields.password = req.body.password;
+//         if (firstName) employeeFields.firstName = firstName;
+//         if (lastName) employeeFields.lastName = lastName;
+//         if (contactNum) employeeFields.contactNum = contactNum;
+//         if (address) employeeFields.address = address;
 
-        try {
-            let employee = await Employees.findOne({ email: req.body.email })
+//         try {
+//             let employee = await Employees.findOne({ email: req.body.email })
 
-            if (employee) {
-                // updating the employee
-                employee = await Employees.findOneAndUpdate(
-                    { email: req.body.email },
-                    { $set: employeeFields },
-                    { new: true }
-                );
+//             if (employee) {
+//                 // updating the employee
+//                 employee = await Employees.findOneAndUpdate(
+//                     { email: req.body.email },
+//                     { $set: employeeFields },
+//                     { new: true }
+//                 );
 
-                return res.json(employee);
-            }
+//                 return res.json(employee);
+//             }
 
-            // creating the employee
-            employee = new Employees(employeeFields);
+//             // creating the employee
+//             employee = new Employees(employeeFields);
 
-            await employee.save();
-            res.json(employee);
-        } catch (error) {
-            res.json(employeeFields)
-            console.error(error.message);
-            res.send('Server Error')
-        }
+//             await employee.save();
+//             res.json(employee);
+//         } catch (error) {
+//             res.json(employeeFields)
+//             console.error(error.message);
+//             res.send('Server Error')
+//         }
 
-    }
+//     }
 
-)
+// )
 
 router.get('/me', auth, async (req, res) => {
     try {
@@ -189,18 +190,48 @@ router.get('/salary', auth, async (req, res) => {
     }
 });
 
-router.post('/leave', auth, async (req, res) => {
-    try {
-        // rEMOVE employee
-        await Employees.findOneAndDelete({ _id: req.employees.id });
-        // remove their salary log
-        await SalaryLogs.findOneAndDelete({ employees: req.employees.id });
+router.post('/leave', auth, [check('numDays', 'Number of days is required').not().isEmpty(),
+check('numDays', 'Number of days must be a number').isNumeric(),
+check('startDate', 'Start Date is required').not().isEmpty(),
+check('endDate', 'End Date is required').not().isEmpty(),
+check('leaveType', 'Leave Type is required').not().isEmpty(),
 
-        res.json({ msg: 'Employee deleted' });
+], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        return res.send(errors);
+    }
+
+    const { numDays, startDate, endDate, leaveType, dateIssued } = req.body
+
+
+    const LeaveField = {};
+    // making the leave request object
+    LeaveField.employees = req.employees.id;
+    if (numDays) LeaveField.numDays = numDays;
+    if (startDate) LeaveField.startDate = startDate;
+    if (endDate) LeaveField.endDate = endDate;
+    if (leaveType) LeaveField.leaveType = leaveType;
+    if (dateIssued) LeaveField.dateIssued = dateIssued;
+
+
+    try {
+
+
+
+        const leave = new LeaveRequestModel(LeaveField)
+
+        await leave.save()
+        res.json({ msg: 'Request Sent'})
 
     } catch (error) {
         console.error(error.message);
         res.send('Server error');
     }
 });
+
+
+
 module.exports = router;

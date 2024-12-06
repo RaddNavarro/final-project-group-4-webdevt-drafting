@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 
 
@@ -8,6 +8,7 @@ export const AdminViewEmployee = () => {
 
     const [auth, setAuth] = useState(false);
     const [users, setUsers] = useState([]);
+    // const [msg, setMsg] = useState('');
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
@@ -99,19 +100,19 @@ export const AdminViewEmployee = () => {
                                 <thead>
                                     <tr>
                                         <th>
-                                            Email
-                                        </th>
-                                        <th>
                                             First Name
                                         </th>
                                         <th>
                                             Last Name
                                         </th>
                                         <th>
-                                            Contact
+                                            Contact Number
                                         </th>
                                         <th>
-                                            address
+                                            Address
+                                        </th>
+                                        <th>
+                                            Action
                                         </th>
                                     </tr>
                                 </thead>
@@ -122,7 +123,6 @@ users &&
 users.map(users => (
     <>
 <tr>
-    <td>{users.email} </td>
 <td>{users.firstName} </td>
 <td>{users.lastName} </td>
 <td>{users.contactNum} </td>
@@ -130,9 +130,9 @@ users.map(users => (
 
 <div class="sigma">
 <button type="button" class="btn btn-danger"  onClick={ () => handleDelete(users._id, users.firstName)}>Delete</button>
-<NavLink to='/admineditprofile'>
+<Link to={`/admineditprofile/${users._id}`}>
 <button type="button" class="btn btn-primary">Edit</button>
-</NavLink>
+</Link>
 </div>
 </tr>
 
