@@ -37,3 +37,41 @@
   }
 }
 
+.skibidi{
+  font-size: 250%;
+  text-align: left;
+}
+
+.skibidi2{
+  text-align: left;
+}
+.toilet{
+  margin: 0;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.table1{
+  margin: 0;
+  position: relative;
+  top: 40%;
+  left: 16%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.table2{
+  margin: 0;
+  position: relative;
+  top: 40%;
+  right: -90%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.shit{
+  text-align: left; 
+}
+
