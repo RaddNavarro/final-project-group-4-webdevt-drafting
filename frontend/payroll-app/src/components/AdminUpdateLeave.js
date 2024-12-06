@@ -83,9 +83,6 @@ export const AdminUpdateLeave = () => {
                         <NavLink to='/adminviewallsalary'>
                             <button type="button" class="btn btn-primary">View all salary reports</button>
                         </NavLink>
-                        <NavLink to='/adminmangeleave'>
-                            <button type="button" class="btn btn-primary">Manage Leave request</button>
-                        </NavLink>
                         <br /> <br /> <br />
 
                         <form>
