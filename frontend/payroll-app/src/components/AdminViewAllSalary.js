@@ -106,29 +106,75 @@ export const AdminViewAllSalary = () => {
                         </NavLink>
 
 
+<div>
+    <div>
+
+
+        <table className="table">
+            <thead>
+<tr>
+
+    <th>
+    Email
+    </th>
+    <th>
+    Name
+    </th>
+    <th>
+    Hours Worked
+    </th>
+    <th>
+    Hourly Rate:
+    </th>
+    <th>
+    Basic Salary:
+    </th>
+    <th>
+    Overtime Pay:
+    </th>
+    <th>
+    Gross Pay:
+    </th>
+    <th>
+    Deductions:
+    </th>
+    <th>
+    Net Pay:
+    </th>
+</tr>
+            
+            </thead>
+            <tbody>
                         {
+                        
                             salary.length > 0 ? salary.map(salary => (
+                                
                                 <>
-                                    <p>Email: {salary.employees.email}</p>
-                                    <p>Name: {salary.employees.firstName} {salary.employees.lastName}</p>
-                                    <p>Hours Worked: {salary.hoursWorked} Hours</p>
-                                    <p>Hourly Rate: ₱{salary.hourlyRate}</p>
-                                    <p>Basic Salary: ₱{basicSalary}</p>
-                                    <p>Overtime Pay: ₱{overtimePay}</p>
-                                    <p>Gross Pay: ₱{grossPay}</p>
-                                    <p>Deductions: ₱{deductions}</p>
-                                    <p>Net Pay: ₱{netPay}</p>
+                                
+                                <tr>
+                                    <td>{salary.employees.email}</td>
+                                    <td>{salary.employees.firstName} {salary.employees.lastName}</td>
+                                    <td>{salary.hoursWorked}</td>
+                                    <td>{salary.hourlyRate}₱</td>
+                                    <td>{basicSalary}₱</td>
+                                    <td>{overtimePay}₱</td>
+                                    <td>{grossPay}₱</td>
+                                    <td>{deductions}₱</td>
+                                    <td>{netPay}₱</td>
 
                                     <div class="sigma">
                                         <button type="button" class="btn btn-danger" onClick={() => handleDelete(salary._id, salary.employees.firstName)}>Delete</button>
                                     </div>
-
+                                    </tr>
                                 </>
                             ))
                             :
                             <h1>No data</h1>
                         }
-
+                        </tbody>
+                        </table>
+</div>
+</div>
                     </>
                     :
                     <>

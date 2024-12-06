@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, redirect, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
